@@ -23,6 +23,10 @@
         {
           "text": "光纖系統安裝",
           "riskType": "special"
+        },
+        {
+          "text": "11111",
+          "riskType": "high"
         }
       ],
       "safetyMeasures": "佩戴安全帽、安全帶，設置圍欄",
@@ -86,14 +90,13 @@
     "conditionLabel": "多雲",
     "source": "manual",
     "temperature": 31,
-    "updateTime": "2026-08-22T05:24:41.923Z",
+    "updateTime": "2026-08-22T06:45:19.133Z",
     "warnings": [
       {
-        "type": "HSWW_AMBER",
-        "name": "黃色工作暑熱警告",
+        "name": "hsww_amber",
         "icon": "static/images/warnings/hsww_amber.jpg"
       }
     ]
   },
-  "lastUpdated": "2026-08-22T05:24:41.924Z"
+  "lastUpdated": "2026-08-22T06:45:19.133Z"
 }
