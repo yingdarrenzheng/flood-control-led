@@ -22,7 +22,7 @@
       "operations": [
         {
           "text": "光纖系統安裝",
-          "riskType": "special"
+          "riskType": "high"
         }
       ],
       "safetyMeasures": "佩戴安全帽、安全帶，設置圍欄",
@@ -35,7 +35,7 @@
       "operations": [
         {
           "text": "高空作業（離地面2米以上）",
-          "riskType": "special"
+          "riskType": "high"
         }
       ],
       "safetyMeasures": "工作平台、安全網、全身式安全帶",
@@ -61,7 +61,7 @@
       "operations": [
         {
           "text": "吊運作業",
-          "riskType": "special"
+          "riskType": "high"
         }
       ],
       "safetyMeasures": "訊號員、警戒區、吊具檢查",
@@ -74,7 +74,7 @@
       "operations": [
         {
           "text": "密閉空間進入",
-          "riskType": "special"
+          "riskType": "high"
         }
       ],
       "safetyMeasures": "通風、氣體檢測、救援計劃",
@@ -87,7 +87,7 @@
     "conditionLabel": "多雲",
     "source": "manual",
     "temperature": 32,
-    "updateTime": "2026-08-22T09:37:53.289Z",
+    "updateTime": "2026-08-22T09:47:07.956Z",
     "warnings": [
       {
         "name": "hsww_amber",
@@ -95,5 +95,5 @@
       }
     ]
   },
-  "lastUpdated": "2026-08-22T09:37:53.289Z"
+  "lastUpdated": "2026-08-22T09:47:07.958Z"
 }
