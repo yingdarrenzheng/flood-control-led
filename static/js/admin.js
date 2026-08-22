@@ -324,6 +324,99 @@ function escapeAttr(s) {
     .replace(/>/g, "&gt;");
 }
 
+// ---- 天文台即時天氣取樣（填入後備欄位） ----
+
+const HKO_STATION_PRIORITY = ["流浮山", "元朗公園", "屯門", "石崗", "荃灣城門谷", "赤鱲角"];
+
+const HKO_ICON_CONDITION = {
+  sunny: [50, 51, 52, 53],
+  cloudy: [54, 60, 61, 80, 81, 82, 83],
+  rainy: [62, 63, 64, 65, 66, 67, 68, 69],
+  thunderstorm: [70, 71],
+  hot: [91],
+  cold: [90],
+};
+
+const HKO_RESOLVE_ICON = [
+  [n => n.includes("黑") && n.includes("暴雨"), "rainb"],
+  [n => n.includes("紅") && n.includes("暴雨"), "rainr"],
+  [n => n.includes("黃") && n.includes("暴雨"), "raina"],
+  [n => n.includes("雷暴"), "ts"],
+  [n => n.includes("山泥傾瀉"), "landslip"],
+  [n => n.includes("酷熱"), "vhot"],
+  [n => n.includes("寒冷"), "cold"],
+  [n => n.includes("強烈季候風"), "sms"],
+  [n => n.includes("霜凍"), "frost"],
+  [n => n.includes("新界北部水浸"), "ntfl"],
+  [n => n.includes("八號東南"), "tc8b"],
+  [n => n.includes("八號西南"), "tc8c"],
+  [n => n.includes("八號東北"), "tc8ne"],
+  [n => n.includes("八號西北"), "tc8d"],
+  [n => n.includes("一號"), "tc1"],
+  [n => n.includes("三號"), "tc3"],
+  [n => n.includes("九號"), "tc9"],
+  [n => n.includes("十號"), "tc10"],
+];
+
+async function fetchHkoToForm() {
+  const statusEl = document.getElementById("hkoStatus");
+  statusEl.textContent = "正在連接天文台...";
+  statusEl.style.color = "#666";
+  try {
+    const [rhrR, warnR] = await Promise.all([
+      fetch("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=tc"),
+      fetch("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=warningInfo&lang=tc").catch(() => null),
+    ]);
+    if (!rhrR.ok) throw new Error("HTTP " + rhrR.status);
+    const rhr = await rhrR.json();
+    const warnInfo = warnR && warnR.ok ? await warnR.json() : null;
+
+    // 氣溫（優先測站）
+    let temp = null;
+    const temps = (rhr.temperature && rhr.temperature.data) || [];
+    for (const st of HKO_STATION_PRIORITY) {
+      const hit = temps.find(t => t.place === st && t.value != null);
+      if (hit) { temp = hit.value; break; }
+    }
+    if (temp === null && temps.length) temp = temps[0].value;
+
+    // 天氣狀況
+    const codes = rhr.icon || [];
+    let condition = "cloudy";
+    if (codes.length) {
+      const c = parseInt(codes[codes.length - 1]);
+      for (const [cond, list] of Object.entries(HKO_ICON_CONDITION)) {
+        if (list.includes(c)) { condition = cond; break; }
+      }
+    }
+
+    // 生效警告 → 圖示代碼
+    const warnCodes = [];
+    if (warnInfo && Array.isArray(warnInfo.warnings)) {
+      for (const w of warnInfo.warnings) {
+        const name = w.name || w.code || "";
+        let icon = null;
+        for (const [match, code] of HKO_RESOLVE_ICON) {
+          if (match(name)) { icon = code; break; }
+        }
+        if (icon) warnCodes.push(icon);
+      }
+    }
+
+    document.getElementById("weatherCondition").value = condition;
+    const condLabelMap = { sunny: "晴", cloudy: "多雲", rainy: "雨", thunderstorm: "雷暴", hot: "酷熱", cold: "寒冷" };
+    document.getElementById("weatherLabel").value = condLabelMap[condition] || "多雲";
+    document.getElementById("weatherTemp").value = temp != null ? temp : "";
+    document.getElementById("weatherWarnings").value = warnCodes.join(",");
+
+    statusEl.textContent = `已取得（更新於 ${new Date().toLocaleTimeString("zh-HK", { hour12: false })}）`;
+    statusEl.style.color = "#16a34a";
+  } catch (e) {
+    statusEl.textContent = "連線失敗：" + e.message;
+    statusEl.style.color = "#dc2626";
+  }
+}
+
 // ---- 初始化 ----
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -331,4 +424,5 @@ window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("addRowBtn").addEventListener("click", addRow);
   document.getElementById("saveBtn").addEventListener("click", saveData);
   document.getElementById("refreshBtn").addEventListener("click", loadData);
+  document.getElementById("btnFetchHko").addEventListener("click", fetchHkoToForm);
 });

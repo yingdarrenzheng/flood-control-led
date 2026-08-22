@@ -42,7 +42,15 @@
       </div>
     </div>
 
-    <h2>天氣資訊（手動設定）</h2>
+    <h2>天氣資訊（後備資料 — 看板已自動連接香港天文台）</h2>
+    <p class="hint" style="margin:0 0 10px;color:#666;font-size:13px;">
+      看板會自動從香港天文台取得即時天氣及生效警告（每 5 分鐘刷新）。
+      以下欄位僅作為天文台連線失敗時的後備顯示，可按按鈕一鍵取樣。
+    </p>
+    <div style="margin-bottom:10px;">
+      <button type="button" id="btnFetchHko" class="btn">🔄 從天文台取得現時天氣</button>
+      <span id="hkoStatus" style="margin-left:10px;color:#666;font-size:13px;"></span>
+    </div>
     <div class="form-grid">
       <div class="field">
         <label for="weatherCondition">天氣狀況</label>

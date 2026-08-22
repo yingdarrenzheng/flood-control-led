@@ -1,17 +1,13 @@
 /* ============================================================
- * 高危工序 LED 看板 — 靜態部署版 (CloudStudio)
- * 天氣資料經 CORS 代理取自香港天文台 (HKO)
+ * 高危工序 LED 看板 — 靜態部署版 (GitHub Pages)
+ * 天氣資料直接取自香港天文台開放資料 API (支援 CORS)
  * 警告圖示為預載之 HKO 官方 GIF
  * 工序資料讀取靜態 data/data.json
  * ============================================================ */
 
-// --- HKO API 設定 ---
+// --- HKO API 設定 (直接連接，無需代理) ---
 const HKO_RHRREAD_URL = "https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=tc";
-const CORS_PROXIES = [
-  u => "https://api.allorigins.win/raw?url=" + encodeURIComponent(u),
-  u => "https://corsproxy.io/?" + u,
-  u => "https://thingproxy.freeboard.io/fetch/" + u,
-];
+const HKO_WARNING_URL = "https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=warningInfo&lang=tc";
 
 // 距離洪水橋最近的測站，按優先順序
 const STATION_PRIORITY = ["流浮山", "元朗公園", "屯門", "石崗", "荃灣城門谷", "赤鱲角"];
@@ -130,23 +126,24 @@ function resolveIcon(wtype, name) {
   return fallback[wtype] || "ts.gif";
 }
 
-// --- HKO 天氣取得 (經 CORS 代理, 移植自 server.py fetch_hko_weather) ---
+// --- HKO 天氣取得 (直接呼叫天文台 API，支援 CORS) ---
 
-function fetchHkoWeather() {
-  // 依次嘗試各 CORS 代理
-  return CORS_PROXIES.reduce(
-    (promise, makeUrl) => promise.catch(() => {
-      const proxiedUrl = makeUrl(HKO_RHRREAD_URL);
-      return fetch(proxiedUrl).then(r => {
-        if (!r.ok) throw new Error("proxy HTTP " + r.status);
-        return r.json();
-      });
-    }),
-    Promise.reject(new Error("no proxy tried"))
-  ).then(raw => parseHkoWeather(raw));
+function fetchJson(url) {
+  return fetch(url).then(r => {
+    if (!r.ok) throw new Error("HKO HTTP " + r.status);
+    return r.json();
+  });
 }
 
-function parseHkoWeather(raw) {
+function fetchHkoWeather() {
+  // 同時取「現時天氣」和「生效警告」
+  return Promise.all([
+    fetchJson(HKO_RHRREAD_URL),
+    fetchJson(HKO_WARNING_URL).catch(() => null), // 無警告時返回 {}，失敗不影響主天氣
+  ]).then(([rhr, warnInfo]) => parseHkoWeather(rhr, warnInfo));
+}
+
+function parseHkoWeather(raw, warnInfo) {
   // 氣溫：按優先測站搜尋
   const temps = (raw.temperature && raw.temperature.data) || [];
   let temperature = null;
@@ -167,7 +164,7 @@ function parseHkoWeather(raw) {
   const iconCodes = raw.icon || [];
   let condition = "cloudy";
   if (iconCodes.length > 0) {
-    const code = parseInt(iconCodes[0]);
+    const code = parseInt(iconCodes[iconCodes.length - 1]);
     for (const [cond, codes] of Object.entries(ICON_CONDITION)) {
       if (codes.includes(code)) {
         condition = cond;
@@ -176,8 +173,23 @@ function parseHkoWeather(raw) {
     }
   }
 
-  // 警告訊息
+  // 警告訊息：優先使用 warningInfo API (code + name)，後備 rhrread.warningMessage
   const warnings = [];
+  const seen = new Set();
+  if (warnInfo && Array.isArray(warnInfo.warnings)) {
+    for (const w of warnInfo.warnings) {
+      const wtype = w.code || "";
+      const name = w.name || wtype;
+      const key = name + "|" + wtype;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      warnings.push({
+        type: wtype,
+        name: name,
+        icon: "static/images/warnings/" + resolveIcon(wtype, name),
+      });
+    }
+  }
   const wm = raw.warningMessage;
   if (Array.isArray(wm)) {
     for (const w of wm) {
@@ -189,11 +201,13 @@ function parseHkoWeather(raw) {
         wtype = String(w);
         name = wtype;
       }
-      const iconFile = resolveIcon(wtype, name);
+      const key = name + "|" + wtype;
+      if (seen.has(key)) continue;
+      seen.add(key);
       warnings.push({
         type: wtype,
         name: name,
-        icon: "static/images/warnings/" + iconFile,
+        icon: "static/images/warnings/" + resolveIcon(wtype, name),
       });
     }
   }
@@ -349,7 +363,7 @@ function fetchWeather() {
   fetchHkoWeather()
     .then(w => renderWeather(w))
     .catch(() => {
-      // CORS 代理失敗：若已有預載天氣則保持不動
+      // 天文台連線失敗：若已有預載天氣則保持不動
       const fallback = window.__fallbackData || {};
       if (fallback.liveWeather && fallback.liveWeather.source !== "offline") {
         return; // 預載天氣已在 render() 中顯示
