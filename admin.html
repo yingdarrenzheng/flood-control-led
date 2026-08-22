@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>高危工序看板後台</title>
+  <link rel="stylesheet" href="static/css/admin.css">
+</head>
+<body>
+  <div class="admin-wrap">
+    <h1>
+      高危工序 LED 看板後台
+      <a href="index.html" target="_blank" class="preview-link">查看顯示頁面</a>
+    </h1>
+
+    <div id="loginSection" class="login-section">
+      <h2>GitHub 認證</h2>
+      <p class="login-note">請輸入你的 GitHub Personal Access Token（需 Contents: Read and write 權限）。Token 僅儲存於此瀏覽器的 localStorage，不會上傳任何第三方。</p>
+      <div class="login-row">
+        <input type="password" id="patInput" placeholder="github_pat_..." style="flex:1; padding:8px 10px; border:1px solid #d1d5db; border-radius:4px; font-size:14px;">
+        <button class="btn btn-primary" id="loginBtn">登入</button>
+        <button class="btn btn-secondary" id="logoutBtn" style="display:none;">登出</button>
+      </div>
+      <div id="loginStatus" class="login-status"></div>
+    </div>
+
+    <div id="editorSection" style="display:none;">
+
+    <h2>基本資訊</h2>
+    <div class="form-grid">
+      <div class="field">
+        <label for="contractNo">合約編號</label>
+        <input type="text" id="contractNo" placeholder="例如 DC/2024/11">
+      </div>
+      <div class="field">
+        <label for="projectName">項目名稱</label>
+        <input type="text" id="projectName" placeholder="例如 洪水橋淨水設施第1期-土木工程">
+      </div>
+      <div class="field" style="grid-column: 1 / -1;">
+        <label for="title">看板標題</label>
+        <input type="text" id="title" placeholder="特別高危/高危工序管理看板">
+      </div>
+    </div>
+
+    <h2>天氣資訊（手動設定）</h2>
+    <div class="form-grid">
+      <div class="field">
+        <label for="weatherCondition">天氣狀況</label>
+        <select id="weatherCondition">
+          <option value="sunny">晴</option>
+          <option value="cloudy">多雲</option>
+          <option value="rainy">雨</option>
+          <option value="thunderstorm">雷暴</option>
+          <option value="hot">酷熱</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="weatherLabel">天氣標籤（顯示文字）</label>
+        <input type="text" id="weatherLabel" placeholder="例如：雨">
+      </div>
+      <div class="field">
+        <label for="weatherTemp">氣溫（°C）</label>
+        <input type="number" id="weatherTemp" step="1" placeholder="例如：30">
+      </div>
+      <div class="field">
+        <label for="weatherWarnings">生效警告（逗號分隔，留空則無）</label>
+        <input type="text" id="weatherWarnings" placeholder="例如：tc8ne,rainb">
+      </div>
+    </div>
+
+    <h2>工序列表</h2>
+    <div class="row-editor">
+      <table>
+        <thead>
+          <tr>
+            <th class="col-num">序號</th>
+            <th class="col-zone">區域</th>
+            <th class="col-op">特別高危/高危工序</th>
+            <th class="col-measure">安全措施</th>
+            <th class="col-subcon">分判商</th>
+            <th class="col-slot">時段</th>
+            <th class="col-action">操作</th>
+          </tr>
+        </thead>
+        <tbody id="rowsBody">
+          <tr><td colspan="7" class="empty-hint">載入中...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="addRowBtn">+ 新增工序</button>
+      <button class="btn btn-success" id="saveBtn">儲存並更新看板</button>
+      <button class="btn btn-secondary" id="refreshBtn">重新載入</button>
+    </div>
+
+    <div id="status" class="status" style="display: none;"></div>
+
+    </div>
+  </div>
+
+  <script src="static/js/admin.js"></script>
+</body>
+</html>
