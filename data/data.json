@@ -88,12 +88,12 @@
     }
   ],
   "liveWeather": {
-    "condition": "cloudy",
-    "conditionLabel": "多雲",
-    "source": "hko-auto",
     "temperature": 32,
-    "updateTime": "2026-08-22T09:57:40.204Z",
-    "warnings": []
+    "condition": "rainy",
+    "conditionLabel": "雨",
+    "warnings": [],
+    "updateTime": "2026-08-22T09:59:21.729Z",
+    "source": "hko-auto"
   },
-  "lastUpdated": "2026-08-22T09:57:40.209Z"
+  "lastUpdated": "2026-08-22T09:59:21.730Z"
 }
