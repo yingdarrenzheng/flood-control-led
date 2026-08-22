@@ -122,27 +122,15 @@
       ],
       "safetyMeasures": "",
       "subcontractor": ""
-    },
-    {
-      "id": 1787388050603,
-      "zone": "xx",
-      "timeSlot": "全天",
-      "operations": [
-        {
-          "text": "xx",
-          "riskType": "high"
-        }
-      ],
-      "safetyMeasures": "",
-      "subcontractor": ""
     }
   ],
+  "history": [],
   "liveWeather": {
     "condition": "cloudy",
     "conditionLabel": "多雲",
     "source": "manual",
     "temperature": 31,
-    "updateTime": "2026-08-22T08:40:57.915Z",
+    "updateTime": "2026-08-22T08:49:34.226Z",
     "warnings": [
       {
         "name": "hsww_amber",
@@ -150,5 +138,5 @@
       }
     ]
   },
-  "lastUpdated": "2026-08-22T08:40:57.915Z"
+  "lastUpdated": "2026-08-22T08:49:34.226Z"
 }
