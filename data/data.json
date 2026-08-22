@@ -23,10 +23,14 @@
         {
           "text": "光纖系統安裝",
           "riskType": "special"
+        },
+        {
+          "text": "11111",
+          "riskType": "high"
         }
       ],
       "safetyMeasures": "佩戴安全帽、安全帶，設置圍欄",
-      "subcontractor": "海龍"
+      "subcontractor": "海龍公司"
     },
     {
       "id": 2,
@@ -39,7 +43,7 @@
         }
       ],
       "safetyMeasures": "工作平台、安全網、全身式安全帶",
-      "subcontractor": "興安"
+      "subcontractor": "興安棚業"
     },
     {
       "id": 3,
@@ -52,7 +56,7 @@
         }
       ],
       "safetyMeasures": "持牌電工、漏電保護、電纜檢查",
-      "subcontractor": "海龍"
+      "subcontractor": "海龍公司"
     },
     {
       "id": 4,
@@ -65,7 +69,7 @@
         }
       ],
       "safetyMeasures": "訊號員、警戒區、吊具檢查",
-      "subcontractor": "宏運"
+      "subcontractor": "宏運起重"
     },
     {
       "id": 5,
@@ -78,15 +82,67 @@
         }
       ],
       "safetyMeasures": "通風、氣體檢測、救援計劃",
-      "subcontractor": "安達"
+      "subcontractor": "安達工程"
+    },
+    {
+      "id": 1787388030579,
+      "zone": "xxx",
+      "timeSlot": "全天",
+      "operations": [
+        {
+          "text": "xx",
+          "riskType": "high"
+        }
+      ],
+      "safetyMeasures": "",
+      "subcontractor": ""
+    },
+    {
+      "id": 1787388036251,
+      "zone": "xxx",
+      "timeSlot": "全天",
+      "operations": [
+        {
+          "text": "xx",
+          "riskType": "high"
+        }
+      ],
+      "safetyMeasures": "",
+      "subcontractor": ""
+    },
+    {
+      "id": 1787388043099,
+      "zone": "xx",
+      "timeSlot": "全天",
+      "operations": [
+        {
+          "text": "xx",
+          "riskType": "high"
+        }
+      ],
+      "safetyMeasures": "",
+      "subcontractor": ""
+    },
+    {
+      "id": 1787388050603,
+      "zone": "xx",
+      "timeSlot": "全天",
+      "operations": [
+        {
+          "text": "xx",
+          "riskType": "high"
+        }
+      ],
+      "safetyMeasures": "",
+      "subcontractor": ""
     }
   ],
   "liveWeather": {
     "condition": "cloudy",
     "conditionLabel": "多雲",
     "source": "manual",
-    "temperature": 32,
-    "updateTime": "2026-08-22T08:27:31.469Z",
+    "temperature": 31,
+    "updateTime": "2026-08-22T08:40:57.915Z",
     "warnings": [
       {
         "name": "hsww_amber",
@@ -94,5 +150,5 @@
       }
     ]
   },
-  "lastUpdated": "2026-08-22T08:27:31.469Z"
+  "lastUpdated": "2026-08-22T08:40:57.915Z"
 }
