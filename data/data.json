@@ -16,19 +16,6 @@
   "manualTemp": "",
   "rows": [
     {
-      "id": 1,
-      "zone": "西廠",
-      "timeSlot": "全天",
-      "operations": [
-        {
-          "text": "光纖系統安裝",
-          "riskType": "high"
-        }
-      ],
-      "safetyMeasures": "佩戴安全帽、安全帶，設置圍欄",
-      "subcontractor": "海龍"
-    },
-    {
       "id": 2,
       "zone": "寫字樓",
       "timeSlot": "全天",
@@ -81,13 +68,31 @@
       "subcontractor": "安達等待"
     }
   ],
-  "history": [],
+  "history": [
+    {
+      "id": 1787392095354,
+      "savedAt": "2026-08-22T09:48:15.003Z",
+      "row": {
+        "id": 1,
+        "zone": "西廠",
+        "timeSlot": "全天",
+        "operations": [
+          {
+            "text": "光纖系統安裝",
+            "riskType": "high"
+          }
+        ],
+        "safetyMeasures": "佩戴安全帽、安全帶，設置圍欄",
+        "subcontractor": "海龍"
+      }
+    }
+  ],
   "liveWeather": {
     "condition": "cloudy",
     "conditionLabel": "多雲",
     "source": "manual",
     "temperature": 32,
-    "updateTime": "2026-08-22T09:48:08.227Z",
+    "updateTime": "2026-08-22T09:48:20.171Z",
     "warnings": [
       {
         "name": "hsww_amber",
@@ -95,5 +100,5 @@
       }
     ]
   },
-  "lastUpdated": "2026-08-22T09:48:08.227Z"
+  "lastUpdated": "2026-08-22T09:48:20.171Z"
 }
