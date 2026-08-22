@@ -109,7 +109,7 @@ function fillWeather() {
   document.getElementById("weatherTemp").value = lw.temperature != null ? lw.temperature : "";
   const warnStr = (lw.warnings || []).map(w => {
     const icon = w.icon || "";
-    return icon.replace("static/images/warnings/", "").replace(".gif", "");
+    return icon.replace("static/images/warnings/", "").replace(/\.(gif|svg|png)$/, "");
   }).join(",");
   document.getElementById("weatherWarnings").value = warnStr;
 }
@@ -224,11 +224,11 @@ function collectData() {
   });
 
   // 構建 liveWeather
-  const warnStr = document.getElementById("weatherWarnings").value.trim();
-  const warnCodes = warnStr ? warnStr.split(",").map(s => s.trim()).filter(Boolean) : [];
+  const warnStrRaw = document.getElementById("weatherWarnings").value.trim();
+  const warnCodes = warnStrRaw ? warnStrRaw.split(",").map(s => s.trim()).filter(Boolean) : [];
   const warnings = warnCodes.map(code => ({
     name: code,
-    icon: `static/images/warnings/${code}.gif`
+    icon: `static/images/warnings/${code}${code.startsWith("hsww_") ? ".svg" : ".gif"}`
   }));
 
   const tempVal = document.getElementById("weatherTemp").value.trim();
@@ -363,13 +363,15 @@ async function fetchHkoToForm() {
   statusEl.textContent = "正在連接天文台...";
   statusEl.style.color = "#666";
   try {
-    const [rhrR, warnR] = await Promise.all([
+    const [rhrR, warnR, hswwR] = await Promise.all([
       fetch("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=tc"),
       fetch("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=warningInfo&lang=tc").catch(() => null),
+      fetch("https://data.weather.gov.hk/weatherAPI/opendata/hsww.php?lang=tc").catch(() => null),
     ]);
     if (!rhrR.ok) throw new Error("HTTP " + rhrR.status);
     const rhr = await rhrR.json();
     const warnInfo = warnR && warnR.ok ? await warnR.json() : null;
+    const hswwInfo = hswwR && hswwR.ok ? await hswwR.json() : null;
 
     // 氣溫（優先測站）
     let temp = null;
@@ -401,6 +403,13 @@ async function fetchHkoToForm() {
         }
         if (icon) warnCodes.push(icon);
       }
+    }
+
+    // 勞工處工作暑熱警告
+    if (hswwInfo && hswwInfo.hsww && hswwInfo.hsww.actionCode !== "CANCEL" && hswwInfo.hsww.actionCode !== "REVOKE") {
+      const lvlMap = { AMBER: "hsww_amber", RED: "hsww_red", BLACK: "hsww_black" };
+      const code = lvlMap[hswwInfo.hsww.warningLevel];
+      if (code) warnCodes.push(code);
     }
 
     document.getElementById("weatherCondition").value = condition;

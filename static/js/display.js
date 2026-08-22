@@ -8,6 +8,8 @@
 // --- HKO API 設定 (直接連接，無需代理) ---
 const HKO_RHRREAD_URL = "https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=tc";
 const HKO_WARNING_URL = "https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=warningInfo&lang=tc";
+// 勞工處「工作暑熱警告」(黃/紅/黑) — 託管於天文台開放資料平台
+const HKO_HSWW_URL = "https://data.weather.gov.hk/weatherAPI/opendata/hsww.php?lang=tc";
 
 // 距離洪水橋最近的測站，按優先順序
 const STATION_PRIORITY = ["流浮山", "元朗公園", "屯門", "石崗", "荃灣城門谷", "赤鱲角"];
@@ -135,15 +137,23 @@ function fetchJson(url) {
   });
 }
 
+// 勞工處工作暑熱警告 → 圖示/名稱對照
+const HSWW_LEVEL = {
+  AMBER: { icon: "hsww_amber.svg", name: "黃色工作暑熱警告" },
+  RED:   { icon: "hsww_red.svg",   name: "紅色工作暑熱警告" },
+  BLACK: { icon: "hsww_black.svg", name: "黑色工作暑熱警告" },
+};
+
 function fetchHkoWeather() {
-  // 同時取「現時天氣」和「生效警告」
+  // 同時取「現時天氣」、「生效警告」、「工作暑熱警告」
   return Promise.all([
     fetchJson(HKO_RHRREAD_URL),
     fetchJson(HKO_WARNING_URL).catch(() => null), // 無警告時返回 {}，失敗不影響主天氣
-  ]).then(([rhr, warnInfo]) => parseHkoWeather(rhr, warnInfo));
+    fetchJson(HKO_HSWW_URL).catch(() => null),    // 無警告時可能為空物件
+  ]).then(([rhr, warnInfo, hsww]) => parseHkoWeather(rhr, warnInfo, hsww));
 }
 
-function parseHkoWeather(raw, warnInfo) {
+function parseHkoWeather(raw, warnInfo, hsww) {
   // 氣溫：按優先測站搜尋
   const temps = (raw.temperature && raw.temperature.data) || [];
   let temperature = null;
@@ -208,6 +218,18 @@ function parseHkoWeather(raw, warnInfo) {
         type: wtype,
         name: name,
         icon: "static/images/warnings/" + resolveIcon(wtype, name),
+      });
+    }
+  }
+
+  // 勞工處工作暑熱警告 (黃/紅/黑)
+  if (hsww && hsww.hsww && hsww.hsww.actionCode !== "CANCEL" && hsww.hsww.actionCode !== "REVOKE") {
+    const lvl = HSWW_LEVEL[hsww.hsww.warningLevel];
+    if (lvl) {
+      warnings.push({
+        type: "HSWW_" + hsww.hsww.warningLevel,
+        name: lvl.name,
+        icon: "static/images/warnings/" + lvl.icon,
       });
     }
   }
