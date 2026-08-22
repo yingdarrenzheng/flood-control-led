@@ -290,11 +290,20 @@ function render() {
       if (rows.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" class="empty">暫無高危工序資料</td></tr>`;
       } else {
-        // 行高由字體自然撐開；若超出顯示區，由自動滾動處理 (表頭 sticky 固定)
         const wrap = document.querySelector(".led-table-wrap");
         if (wrap) {
           const keepScroll = wrap.scrollTop;
           requestAnimationFrame(() => {
+            wrap.scrollTop = Math.min(keepScroll, wrap.scrollHeight);
+            // 資料不多時：行高自適應撐滿整頁；超出時才滾動
+            const thead = document.querySelector(".led-table thead");
+            const theadH = thead ? thead.offsetHeight : 36;
+            const available = wrap.clientHeight - theadH;
+            const rowH = Math.max(40, Math.floor(available / rows.length));
+            Array.from(tbody.querySelectorAll("tr")).forEach(tr => {
+              tr.style.height = rowH + "px";
+            });
+            // 若自適應後仍超出（極端多行），改為自動滾動
             wrap.scrollTop = Math.min(keepScroll, wrap.scrollHeight);
             setupAutoScroll();
           });
