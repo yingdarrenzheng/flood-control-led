@@ -416,7 +416,7 @@ function demoWeather() {
   };
 }
 
-// --- 表格自動滾動 (每秒 10px，表頭固定) ---
+// --- 表格自動滾動 (每秒 5px，表頭固定) ---
 let autoScrollTimer = null;
 
 function setupAutoScroll() {
@@ -430,7 +430,7 @@ function setupAutoScroll() {
   if (wrap.scrollHeight <= wrap.clientHeight + 2) return;
 
   let pauseUntil = 0;
-  // 10px/秒 → 每 100ms 前進 1px
+  // 5px/秒 → 每 200ms 前進 1px
   autoScrollTimer = setInterval(() => {
     const now = Date.now();
     if (now < pauseUntil) return;
@@ -444,7 +444,7 @@ function setupAutoScroll() {
         pauseUntil = Date.now() + 1500;
       }, 3000);
     }
-  }, 100);
+  }, 200);
 }
 
 function tickClock() {
