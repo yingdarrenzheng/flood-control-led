@@ -83,11 +83,11 @@
   ],
   "history": [],
   "liveWeather": {
-    "condition": "cloudy",
+    "condition": "hot",
     "conditionLabel": "多雲",
     "source": "manual",
-    "temperature": 31,
-    "updateTime": "2026-08-22T09:12:43.661Z",
+    "temperature": 32,
+    "updateTime": "2026-08-22T09:18:06.064Z",
     "warnings": [
       {
         "name": "hsww_amber",
@@ -95,5 +95,5 @@
       }
     ]
   },
-  "lastUpdated": "2026-08-22T09:12:43.661Z"
+  "lastUpdated": "2026-08-22T09:18:06.064Z"
 }
