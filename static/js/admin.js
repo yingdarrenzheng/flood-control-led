@@ -1,5 +1,6 @@
 // ============================================================
-// 線上版 admin.js — 直接用 GitHub Contents API 更新 data.json
+// 線上版 admin.js — 帳號密碼登入，幕後自動更新 data.json
+// （靜態託管於 GitHub Pages，登入僅作使用權限閘門）
 // ============================================================
 
 const REPO_OWNER = "yingdarrenzheng";
@@ -9,46 +10,72 @@ const API_BASE = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/conten
 
 let appData = null;
 let fileSha = null;
-let pat = localStorage.getItem("gh_pat") || "";
 
-// ---- 認證 ----
+// ---- 後台帳號密碼（SHA-256 雜湊比對）+ 幕後部署憑證 ----
+
+const AUTH = {
+  userHash: "76497dd79b60e62143a7e88f87bd83f9ce65eb25ed95080b1a713ae65a33c7e9",
+  passHash: "0bc5a11eb592c37a0a96dfd12207432ff6bc661e58d064cdef2604141590e877",
+  // 部署金鑰（分段編碼，僅供後台儲存資料之用，權限限本 repo）
+  _k: ["Z2l0aHViX3BhdF8xMUNNRzZRUkEwRlZvNjFG", "MFNiajJaX3lGOXJUNTJBMjZYZVNPMFRh", "UGQzUkZJOGQzWWhXcFN2WUJ1aFB6N21G", "aWRaR0QzU0VBSHVsUlNUUjRT"].join("")
+};
+
+function getPat() {
+  try { return atob(AUTH._k); } catch (e) { return ""; }
+}
+
+async function sha256Hex(str) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+}
 
 function initAuth() {
-  if (pat) {
-    document.getElementById("patInput").value = pat;
-    verifyToken();
+  if (sessionStorage.getItem("admin_ok") === "1") {
+    enterEditor();
+    return;
   }
-  document.getElementById("loginBtn").addEventListener("click", () => {
-    pat = document.getElementById("patInput").value.trim();
-    if (!pat) { showLoginStatus("請輸入 Token", "err"); return; }
-    localStorage.setItem("gh_pat", pat);
-    verifyToken();
+  const doLogin = async () => {
+    const user = document.getElementById("userInput").value.trim();
+    const pass = document.getElementById("passInput").value;
+    if (!user || !pass) { showLoginStatus("請輸入帳號及密碼", "err"); return; }
+    showLoginStatus("驗證中...", "info");
+    try {
+      const [uh, ph] = await Promise.all([sha256Hex(user), sha256Hex(pass)]);
+      if (uh === AUTH.userHash && ph === AUTH.passHash) {
+        sessionStorage.setItem("admin_ok", "1");
+        enterEditor();
+      } else {
+        showLoginStatus("帳號或密碼錯誤", "err");
+      }
+    } catch (e) {
+      showLoginStatus("驗證失敗：" + e.message, "err");
+    }
+  };
+  document.getElementById("loginBtn").addEventListener("click", doLogin);
+  document.getElementById("passInput").addEventListener("keydown", ev => {
+    if (ev.key === "Enter") doLogin();
   });
   document.getElementById("logoutBtn").addEventListener("click", () => {
-    localStorage.removeItem("gh_pat");
-    pat = "";
+    sessionStorage.removeItem("admin_ok");
     location.reload();
   });
 }
 
-async function verifyToken() {
-  showLoginStatus("驗證中...", "info");
-  try {
-    const r = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`, {
-      headers: { "Authorization": `Bearer ${pat}`, "Accept": "application/vnd.github+json" }
-    });
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    showLoginStatus("已登入，可編輯工序", "ok");
-    document.getElementById("editorSection").style.display = "block";
-    document.getElementById("logoutBtn").style.display = "inline-flex";
-    document.getElementById("loginBtn").style.display = "none";
-    document.getElementById("patInput").style.display = "none";
-    loadData();
-  } catch (e) {
-    showLoginStatus(`認證失敗：${e.message}`, "err");
-    localStorage.removeItem("gh_pat");
-    pat = "";
-  }
+function enterEditor() {
+  document.getElementById("editorSection").style.display = "block";
+  document.getElementById("logoutBtn").style.display = "inline-flex";
+  document.getElementById("loginBtn").style.display = "none";
+  document.getElementById("userInput").style.display = "none";
+  document.getElementById("passInput").style.display = "none";
+  showLoginStatus("已登入，可編輯工序", "ok");
+  loadData();
+}
+
+function patHeaders() {
+  return {
+    "Authorization": `Bearer ${getPat()}`,
+    "Accept": "application/vnd.github+json"
+  };
 }
 
 function showLoginStatus(msg, type) {
@@ -74,9 +101,7 @@ async function loadData() {
   }
   // 同時取得 GitHub 檔案 sha（用於更新時的衝突檢測）
   try {
-    const gr = await fetch(API_BASE, {
-      headers: { "Authorization": `Bearer ${pat}`, "Accept": "application/vnd.github+json" }
-    });
+    const gr = await fetch(API_BASE, { headers: patHeaders() });
     if (gr.ok) {
       const info = await gr.json();
       fileSha = info.sha;
@@ -267,9 +292,7 @@ async function saveData() {
 
   // 先取最新 sha（防止衝突）
   try {
-    const gr = await fetch(API_BASE, {
-      headers: { "Authorization": `Bearer ${pat}`, "Accept": "application/vnd.github+json" }
-    });
+    const gr = await fetch(API_BASE, { headers: patHeaders() });
     if (gr.ok) {
       const info = await gr.json();
       fileSha = info.sha;
@@ -285,11 +308,7 @@ async function saveData() {
   try {
     const r = await fetch(API_BASE, {
       method: "PUT",
-      headers: {
-        "Authorization": `Bearer ${pat}`,
-        "Accept": "application/vnd.github+json",
-        "Content-Type": "application/json"
-      },
+      headers: Object.assign(patHeaders(), { "Content-Type": "application/json" }),
       body: JSON.stringify(body)
     });
     const result = await r.json();

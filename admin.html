@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>高危工序看板後台</title>
-  <link rel="stylesheet" href="static/css/admin.css">
+  <link rel="stylesheet" href="static/css/admin.css?v=2">
 </head>
 <body>
   <div class="admin-wrap">
@@ -14,12 +14,17 @@
     </h1>
 
     <div id="loginSection" class="login-section">
-      <h2>GitHub 認證</h2>
-      <p class="login-note">請輸入你的 GitHub Personal Access Token（需 Contents: Read and write 權限）。Token 僅儲存於此瀏覽器的 localStorage，不會上傳任何第三方。</p>
-      <div class="login-row">
-        <input type="password" id="patInput" placeholder="github_pat_..." style="flex:1; padding:8px 10px; border:1px solid #d1d5db; border-radius:4px; font-size:14px;">
-        <button class="btn btn-primary" id="loginBtn">登入</button>
-        <button class="btn btn-secondary" id="logoutBtn" style="display:none;">登出</button>
+      <h2>後台登入</h2>
+      <p class="login-note">請輸入後台帳號及密碼。登入後可直接編輯工序，儲存時自動更新看板。</p>
+      <div class="login-row" style="flex-direction:column; gap:10px;">
+        <input type="text" id="userInput" placeholder="帳號" autocomplete="username"
+               style="width:100%; max-width:320px; padding:8px 10px; border:1px solid #d1d5db; border-radius:4px; font-size:14px;">
+        <input type="password" id="passInput" placeholder="密碼" autocomplete="current-password"
+               style="width:100%; max-width:320px; padding:8px 10px; border:1px solid #d1d5db; border-radius:4px; font-size:14px;">
+        <div>
+          <button class="btn btn-primary" id="loginBtn">登入</button>
+          <button class="btn btn-secondary" id="logoutBtn" style="display:none;">登出</button>
+        </div>
       </div>
       <div id="loginStatus" class="login-status"></div>
     </div>
@@ -107,6 +112,6 @@
     </div>
   </div>
 
-  <script src="static/js/admin.js"></script>
+  <script src="static/js/admin.js?v=2"></script>
 </body>
 </html>
