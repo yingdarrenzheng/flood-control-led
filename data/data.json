@@ -118,6 +118,58 @@
       ],
       "safetyMeasures": "",
       "subcontractor": ""
+    },
+    {
+      "id": 1787389624246,
+      "zone": "",
+      "timeSlot": "全天",
+      "operations": [
+        {
+          "text": "",
+          "riskType": "high"
+        }
+      ],
+      "safetyMeasures": "",
+      "subcontractor": ""
+    },
+    {
+      "id": 1787389625854,
+      "zone": "",
+      "timeSlot": "全天",
+      "operations": [
+        {
+          "text": "",
+          "riskType": "high"
+        }
+      ],
+      "safetyMeasures": "",
+      "subcontractor": ""
+    },
+    {
+      "id": 1787389627486,
+      "zone": "",
+      "timeSlot": "全天",
+      "operations": [
+        {
+          "text": "",
+          "riskType": "high"
+        }
+      ],
+      "safetyMeasures": "",
+      "subcontractor": ""
+    },
+    {
+      "id": 1787389628180,
+      "zone": "",
+      "timeSlot": "全天",
+      "operations": [
+        {
+          "text": "",
+          "riskType": "high"
+        }
+      ],
+      "safetyMeasures": "",
+      "subcontractor": ""
     }
   ],
   "history": [],
@@ -126,7 +178,7 @@
     "conditionLabel": "多雲",
     "source": "manual",
     "temperature": 31,
-    "updateTime": "2026-08-22T09:05:44.265Z",
+    "updateTime": "2026-08-22T09:07:08.777Z",
     "warnings": [
       {
         "name": "hsww_amber",
@@ -134,5 +186,5 @@
       }
     ]
   },
-  "lastUpdated": "2026-08-22T09:05:44.265Z"
+  "lastUpdated": "2026-08-22T09:07:08.777Z"
 }
