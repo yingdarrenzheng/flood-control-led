@@ -452,14 +452,9 @@ function tickClock() {
 }
 
 function scaleToFit() {
+  // 面板已 100% 填滿視窗，無需縮放
   const frame = document.querySelector(".led-frame");
-  if (!frame) return;
-  const W = window.innerWidth;
-  const H = window.innerHeight;
-  const scaleX = W / 896;
-  const scaleY = H / 448;
-  const scale = Math.min(scaleX, scaleY, 1);
-  frame.style.transform = `scale(${scale})`;
+  if (frame) frame.style.transform = "none";
 }
 
 window.addEventListener("resize", scaleToFit);
