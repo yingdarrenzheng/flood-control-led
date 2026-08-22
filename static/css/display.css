@@ -156,6 +156,7 @@ body {
   height: 40px;
   min-height: 40px;
   color: #000;
+  border-top: 2px solid #000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -234,8 +235,8 @@ body {
 .col-no { width: 55px; }
 .col-zone { width: 95px; }
 .col-op { width: 265px; }
-.col-measure { width: 265px; }
-.col-subcon { width: 71px; }
+.col-measure { width: 255px; }
+.col-subcon { width: 81px; }
 .col-check { width: 71px; }
 
 .risk-special {
