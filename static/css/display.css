@@ -201,7 +201,10 @@ body {
 
 .led-table th {
   padding: 5px 2px;
-  border: 1px solid #000;
+  border-top: 0;
+  border-bottom: 1px solid #000;
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
   font-size: 18px;
   font-weight: 700;
   text-align: center;
@@ -211,7 +214,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 2;
-  /* border-collapse 下 sticky 邊框會在滾動時消失，改用陰影畫底/左/右線保證恆在；頂線由 .led-table-wrap 的 2px 提供 */
+  /* border-collapse 下 sticky 的底/左/右線會在滾動時消失，改用陰影保證恆在；頂線由 .led-table-wrap 的 2px 提供 */
   box-shadow: inset 0 -1px 0 #000, inset 1px 0 0 #000, inset -1px 0 0 #000;
 }
 
