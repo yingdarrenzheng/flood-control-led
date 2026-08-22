@@ -90,10 +90,10 @@
   "liveWeather": {
     "condition": "cloudy",
     "conditionLabel": "多雲",
-    "source": "manual",
+    "source": "hko-auto",
     "temperature": 32,
-    "updateTime": "2026-08-22T09:53:58.638Z",
+    "updateTime": "2026-08-22T09:57:40.204Z",
     "warnings": []
   },
-  "lastUpdated": "2026-08-22T09:53:58.638Z"
+  "lastUpdated": "2026-08-22T09:57:40.209Z"
 }
