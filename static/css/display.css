@@ -37,7 +37,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 3px 10px;
-  border-bottom: 2px solid #000;
+  border-bottom: 1px solid #000;
 }
 
 .header-left {
@@ -180,7 +180,7 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   background: #fff;
-  border-top: 2px solid #000;
+  border-top: 1px solid #000;
 }
 
 .led-table-wrap::-webkit-scrollbar {
