@@ -88,18 +88,12 @@
     }
   ],
   "liveWeather": {
-    "temperature": 30,
     "condition": "rainy",
     "conditionLabel": "雨",
-    "warnings": [
-      {
-        "type": "WTS",
-        "name": "雷暴警告",
-        "icon": "static/images/warnings/ts.gif"
-      }
-    ],
-    "updateTime": "2026-08-22T18:02:00+08:00",
-    "source": "HKO"
+    "source": "manual",
+    "temperature": 29,
+    "updateTime": "2026-08-22T12:34:14.597Z",
+    "warnings": []
   },
-  "lastUpdated": "2026-08-22T10:08:14.852952Z"
+  "lastUpdated": "2026-08-22T12:34:14.597Z"
 }
