@@ -1,93 +1,93 @@
 {
   "contractNo": "DC/2024/11",
-  "displayDate": "2026-08-22",
-  "lastUpdated": "2026-08-22T02:45:58.496Z",
-  "manualTemp": "",
   "projectName": "洪水橋淨水設施第1期-土木工程",
-  "rows": [
-    {
-      "id": 1,
-      "operations": [
-        {
-          "riskType": "special",
-          "text": "光纖系統安裝"
-        }
-      ],
-      "safetyMeasures": "佩戴安全帽、安全帶，設置圍欄",
-      "subcontractor": "海龍公司",
-      "timeSlot": "上午",
-      "zone": "西廠"
-    },
-    {
-      "id": 2,
-      "operations": [
-        {
-          "riskType": "special",
-          "text": "高空作業（離地面2米以上）"
-        }
-      ],
-      "safetyMeasures": "工作平台、安全網、全身式安全帶",
-      "subcontractor": "興安棚業",
-      "timeSlot": "上午",
-      "zone": "寫字樓"
-    },
-    {
-      "id": 3,
-      "operations": [
-        {
-          "riskType": "high",
-          "text": "臨時用電接駁"
-        }
-      ],
-      "safetyMeasures": "持牌電工、漏電保護、電纜檢查",
-      "subcontractor": "海龍公司",
-      "timeSlot": "全天",
-      "zone": "西廠"
-    },
-    {
-      "id": 4,
-      "operations": [
-        {
-          "riskType": "special",
-          "text": "吊運作業"
-        }
-      ],
-      "safetyMeasures": "訊號員、警戒區、吊具檢查",
-      "subcontractor": "宏運起重",
-      "timeSlot": "上午",
-      "zone": "全區"
-    },
-    {
-      "id": 5,
-      "operations": [
-        {
-          "riskType": "special",
-          "text": "密閉空間進入"
-        }
-      ],
-      "safetyMeasures": "通風、氣體檢測、救援計劃",
-      "subcontractor": "安達工程",
-      "timeSlot": "下午",
-      "zone": "寫字樓"
-    }
-  ],
+  "title": "特別高危/高危工序管理看板",
+  "displayDate": "2026-08-22",
+  "weather": {
+    "condition": "rainy",
+    "temperature": 30.4
+  },
   "safetyIcons": [
     "amber",
     "thunderstorm",
     "very-hot"
   ],
   "showSafetyIcons": true,
-  "title": "特別高危/高危工序管理看板",
-  "weather": {
-    "condition": "rainy",
-    "temperature": 30.4
-  },
+  "manualTemp": "",
+  "rows": [
+    {
+      "id": 1,
+      "zone": "西廠",
+      "timeSlot": "上午",
+      "operations": [
+        {
+          "text": "光纖系統安裝",
+          "riskType": "special"
+        }
+      ],
+      "safetyMeasures": "佩戴安全帽、安全帶，設置圍欄",
+      "subcontractor": "海龍公司"
+    },
+    {
+      "id": 2,
+      "zone": "寫字樓",
+      "timeSlot": "上午",
+      "operations": [
+        {
+          "text": "高空作業（離地面2米以上）",
+          "riskType": "special"
+        }
+      ],
+      "safetyMeasures": "工作平台、安全網、全身式安全帶",
+      "subcontractor": "興安棚業"
+    },
+    {
+      "id": 3,
+      "zone": "西廠",
+      "timeSlot": "全天",
+      "operations": [
+        {
+          "text": "臨時用電接駁",
+          "riskType": "high"
+        }
+      ],
+      "safetyMeasures": "持牌電工、漏電保護、電纜檢查",
+      "subcontractor": "海龍公司"
+    },
+    {
+      "id": 4,
+      "zone": "全區",
+      "timeSlot": "上午",
+      "operations": [
+        {
+          "text": "吊運作業",
+          "riskType": "special"
+        }
+      ],
+      "safetyMeasures": "訊號員、警戒區、吊具檢查",
+      "subcontractor": "宏運起重"
+    },
+    {
+      "id": 5,
+      "zone": "寫字樓",
+      "timeSlot": "下午",
+      "operations": [
+        {
+          "text": "密閉空間進入",
+          "riskType": "special"
+        }
+      ],
+      "safetyMeasures": "通風、氣體檢測、救援計劃",
+      "subcontractor": "安達工程"
+    }
+  ],
   "liveWeather": {
     "condition": "rainy",
     "conditionLabel": "雨",
-    "source": "HKO",
+    "source": "manual",
     "temperature": 30,
-    "updateTime": "2026-08-22T11:02:00+08:00",
+    "updateTime": "2026-08-22T05:14:27.540Z",
     "warnings": []
-  }
+  },
+  "lastUpdated": "2026-08-22T05:14:27.540Z"
 }
