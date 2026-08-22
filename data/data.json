@@ -78,7 +78,7 @@
         }
       ],
       "safetyMeasures": "通風、氣體檢測、救援計劃",
-      "subcontractor": "安達"
+      "subcontractor": "安達等待"
     }
   ],
   "history": [],
@@ -87,7 +87,7 @@
     "conditionLabel": "多雲",
     "source": "manual",
     "temperature": 32,
-    "updateTime": "2026-08-22T09:18:46.712Z",
+    "updateTime": "2026-08-22T09:37:53.289Z",
     "warnings": [
       {
         "name": "hsww_amber",
@@ -95,5 +95,5 @@
       }
     ]
   },
-  "lastUpdated": "2026-08-22T09:18:46.712Z"
+  "lastUpdated": "2026-08-22T09:37:53.289Z"
 }
