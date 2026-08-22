@@ -193,7 +193,7 @@ body {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 26px;
+  font-size: 18px;
 }
 
 .led-table thead {
@@ -201,9 +201,9 @@ body {
 }
 
 .led-table th {
-  padding: 6px 2px;
+  padding: 5px 2px;
   border: 1px solid #000;
-  font-size: 28px;
+  font-size: 18px;
   font-weight: 700;
   text-align: center;
   vertical-align: middle;
@@ -215,7 +215,7 @@ body {
 }
 
 .led-table td {
-  padding: 8px 6px;
+  padding: 6px 5px;
   border: 1px solid #000;
   text-align: center;
   vertical-align: middle;
@@ -252,13 +252,13 @@ body {
 
 .check-yes {
   color: #000;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 400;
 }
 
 .check-no {
   color: #000;
-  font-size: 24px;
+  font-size: 20px;
 }
 
 /* Footer */
