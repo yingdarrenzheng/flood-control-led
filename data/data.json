@@ -79,97 +79,6 @@
       ],
       "safetyMeasures": "通風、氣體檢測、救援計劃",
       "subcontractor": "安達"
-    },
-    {
-      "id": 1787389541089,
-      "zone": "",
-      "timeSlot": "全天",
-      "operations": [
-        {
-          "text": "",
-          "riskType": "high"
-        }
-      ],
-      "safetyMeasures": "",
-      "subcontractor": ""
-    },
-    {
-      "id": 1787389542460,
-      "zone": "",
-      "timeSlot": "全天",
-      "operations": [
-        {
-          "text": "",
-          "riskType": "high"
-        }
-      ],
-      "safetyMeasures": "",
-      "subcontractor": ""
-    },
-    {
-      "id": 1787389543552,
-      "zone": "",
-      "timeSlot": "全天",
-      "operations": [
-        {
-          "text": "",
-          "riskType": "high"
-        }
-      ],
-      "safetyMeasures": "",
-      "subcontractor": ""
-    },
-    {
-      "id": 1787389624246,
-      "zone": "",
-      "timeSlot": "全天",
-      "operations": [
-        {
-          "text": "",
-          "riskType": "high"
-        }
-      ],
-      "safetyMeasures": "",
-      "subcontractor": ""
-    },
-    {
-      "id": 1787389625854,
-      "zone": "",
-      "timeSlot": "全天",
-      "operations": [
-        {
-          "text": "",
-          "riskType": "high"
-        }
-      ],
-      "safetyMeasures": "",
-      "subcontractor": ""
-    },
-    {
-      "id": 1787389627486,
-      "zone": "",
-      "timeSlot": "全天",
-      "operations": [
-        {
-          "text": "",
-          "riskType": "high"
-        }
-      ],
-      "safetyMeasures": "",
-      "subcontractor": ""
-    },
-    {
-      "id": 1787389628180,
-      "zone": "",
-      "timeSlot": "全天",
-      "operations": [
-        {
-          "text": "",
-          "riskType": "high"
-        }
-      ],
-      "safetyMeasures": "",
-      "subcontractor": ""
     }
   ],
   "history": [],
@@ -178,7 +87,7 @@
     "conditionLabel": "多雲",
     "source": "manual",
     "temperature": 31,
-    "updateTime": "2026-08-22T09:07:14.601Z",
+    "updateTime": "2026-08-22T09:12:42.193Z",
     "warnings": [
       {
         "name": "hsww_amber",
@@ -186,5 +95,5 @@
       }
     ]
   },
-  "lastUpdated": "2026-08-22T09:07:14.601Z"
+  "lastUpdated": "2026-08-22T09:12:42.193Z"
 }
