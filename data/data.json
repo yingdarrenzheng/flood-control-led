@@ -26,7 +26,7 @@
         }
       ],
       "safetyMeasures": "佩戴安全帽、安全帶，設置圍欄",
-      "subcontractor": "海龍公司"
+      "subcontractor": "海龍"
     },
     {
       "id": 2,
@@ -39,7 +39,7 @@
         }
       ],
       "safetyMeasures": "工作平台、安全網、全身式安全帶",
-      "subcontractor": "興安棚業"
+      "subcontractor": "興安"
     },
     {
       "id": 3,
@@ -52,7 +52,7 @@
         }
       ],
       "safetyMeasures": "持牌電工、漏電保護、電纜檢查",
-      "subcontractor": "海龍公司"
+      "subcontractor": "海龍"
     },
     {
       "id": 4,
@@ -65,7 +65,7 @@
         }
       ],
       "safetyMeasures": "訊號員、警戒區、吊具檢查",
-      "subcontractor": "宏運起重"
+      "subcontractor": "宏運"
     },
     {
       "id": 5,
@@ -78,15 +78,15 @@
         }
       ],
       "safetyMeasures": "通風、氣體檢測、救援計劃",
-      "subcontractor": "安達工程"
+      "subcontractor": "安達"
     }
   ],
   "liveWeather": {
     "condition": "cloudy",
     "conditionLabel": "多雲",
     "source": "manual",
-    "temperature": 31,
-    "updateTime": "2026-08-22T08:25:13.814Z",
+    "temperature": 32,
+    "updateTime": "2026-08-22T08:27:31.469Z",
     "warnings": [
       {
         "name": "hsww_amber",
@@ -94,5 +94,5 @@
       }
     ]
   },
-  "lastUpdated": "2026-08-22T08:25:13.814Z"
+  "lastUpdated": "2026-08-22T08:27:31.469Z"
 }
