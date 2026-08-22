@@ -30,15 +30,15 @@ body {
   position: relative;
 }
 
-/* Header */
+/* Header (縮小至約 2/3) */
 .led-header {
-  height: 76px;
-  min-height: 76px;
+  height: 50px;
+  min-height: 50px;
   background: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 10px;
+  padding: 2px 8px;
   border-bottom: 2px solid #000;
 }
 
@@ -50,24 +50,24 @@ body {
 }
 
 .header-logo {
-  height: 44px;
-  max-width: 140px;
+  height: 29px;
+  max-width: 95px;
   width: auto;
   object-fit: contain;
 }
 
 .header-logo-dsd {
-  height: 54px;
-  max-width: 150px;
+  height: 36px;
+  max-width: 100px;
 }
 
 .header-logo-aecom {
-  height: 38px;
-  max-width: 110px;
+  height: 25px;
+  max-width: 74px;
 }
 
 .header-logo-csbb {
-  margin-left: 10px;
+  margin-left: 6px;
 }
 
 .safety-icons {
@@ -81,7 +81,7 @@ body {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   max-width: 320px;
   overflow: hidden;
 }
@@ -109,7 +109,7 @@ body {
 }
 
 .warning-icon-img {
-  height: 34px;
+  height: 22px;
   width: auto;
   display: block;
 }
@@ -120,28 +120,28 @@ body {
   align-items: flex-end;
   justify-content: center;
   height: 100%;
-  gap: 2px;
+  gap: 1px;
 }
 
 .header-weather-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 2px;
+  gap: 6px;
+  margin-top: 1px;
 }
 
 .weather-box {
   display: flex;
   align-items: center;
-  gap: 4px;
-  border-radius: 4px;
-  padding: 2px 6px;
-  font-size: 12px;
+  gap: 3px;
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-size: 11px;
   color: #005a9e;
 }
 
 .weather-icon {
-  font-size: 32px;
+  font-size: 21px;
 }
 
 .weather-text {
@@ -176,19 +176,24 @@ body {
   color: #1565c0;
 }
 
-/* Table wrapper */
+/* Table wrapper (可滾動，表頭固定) */
 .led-table-wrap {
   flex: 1;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   background: #fff;
+}
+
+.led-table-wrap::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 .led-table {
   width: 100%;
-  height: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 13px;
+  font-size: 26px;
 }
 
 .led-table thead {
@@ -196,18 +201,21 @@ body {
 }
 
 .led-table th {
-  padding: 4px 2px;
+  padding: 6px 2px;
   border: 1px solid #000;
-  font-size: 14px;
+  font-size: 28px;
   font-weight: 700;
   text-align: center;
   vertical-align: middle;
   line-height: 1.2;
   background: #e0e0e0;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 .led-table td {
-  padding: 4px 4px;
+  padding: 8px 6px;
   border: 1px solid #000;
   text-align: center;
   vertical-align: middle;
@@ -220,12 +228,12 @@ body {
   height: auto;
 }
 
-.col-no { width: 40px; }
-.col-zone { width: 80px; }
-.col-op { width: 270px; }
-.col-measure { width: 270px; }
-.col-subcon { width: 130px; }
-.col-check { width: 70px; }
+.col-no { width: 55px; }
+.col-zone { width: 95px; }
+.col-op { width: 265px; }
+.col-measure { width: 265px; }
+.col-subcon { width: 145px; }
+.col-check { width: 71px; }
 
 .risk-special {
   color: #d32f2f;
@@ -244,13 +252,13 @@ body {
 
 .check-yes {
   color: #000;
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 400;
 }
 
 .check-no {
   color: #000;
-  font-size: 18px;
+  font-size: 24px;
 }
 
 /* Footer */
