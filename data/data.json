@@ -87,7 +87,13 @@
     "source": "manual",
     "temperature": 31,
     "updateTime": "2026-08-22T05:24:41.923Z",
-    "warnings": []
+    "warnings": [
+      {
+        "type": "HSWW_AMBER",
+        "name": "黃色工作暑熱警告",
+        "icon": "static/images/warnings/hsww_amber.svg"
+      }
+    ]
   },
   "lastUpdated": "2026-08-22T05:24:41.924Z"
 }
