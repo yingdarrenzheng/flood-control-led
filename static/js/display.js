@@ -143,7 +143,10 @@ const WB_MIN_SAVE_INTERVAL = 60000;
 
 function wbSetPat(p) { wbPat = p || ""; }
 function wbPatHeaders() {
-  const h = { "Accept": "application/vnd.github+json" };
+  const h = {
+    "Accept": "application/vnd.github+json",
+    "User-Agent": "flood-control-led-display"
+  };
   if (wbPat) h["Authorization"] = `Bearer ${wbPat}`;
   return h;
 }
