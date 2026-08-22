@@ -91,7 +91,7 @@
       {
         "type": "HSWW_AMBER",
         "name": "黃色工作暑熱警告",
-        "icon": "static/images/warnings/hsww_amber.svg"
+        "icon": "static/images/warnings/hsww_amber.jpg"
       }
     ]
   },

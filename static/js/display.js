@@ -139,9 +139,9 @@ function fetchJson(url) {
 
 // 勞工處工作暑熱警告 → 圖示/名稱對照
 const HSWW_LEVEL = {
-  AMBER: { icon: "hsww_amber.svg", name: "黃色工作暑熱警告" },
-  RED:   { icon: "hsww_red.svg",   name: "紅色工作暑熱警告" },
-  BLACK: { icon: "hsww_black.svg", name: "黑色工作暑熱警告" },
+  AMBER: { icon: "hsww_amber.jpg", name: "黃色工作暑熱警告" },
+  RED:   { icon: "hsww_red.jpg",   name: "紅色工作暑熱警告" },
+  BLACK: { icon: "hsww_black.jpg", name: "黑色工作暑熱警告" },
 };
 
 function fetchHkoWeather() {

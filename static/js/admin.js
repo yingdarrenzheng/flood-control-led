@@ -109,7 +109,7 @@ function fillWeather() {
   document.getElementById("weatherTemp").value = lw.temperature != null ? lw.temperature : "";
   const warnStr = (lw.warnings || []).map(w => {
     const icon = w.icon || "";
-    return icon.replace("static/images/warnings/", "").replace(/\.(gif|svg|png)$/, "");
+    return icon.replace("static/images/warnings/", "").replace(/\.(gif|svg|png|jpg|jpeg)$/, "");
   }).join(",");
   document.getElementById("weatherWarnings").value = warnStr;
 }
@@ -228,7 +228,7 @@ function collectData() {
   const warnCodes = warnStrRaw ? warnStrRaw.split(",").map(s => s.trim()).filter(Boolean) : [];
   const warnings = warnCodes.map(code => ({
     name: code,
-    icon: `static/images/warnings/${code}${code.startsWith("hsww_") ? ".svg" : ".gif"}`
+    icon: `static/images/warnings/${code}${code.startsWith("hsww_") ? ".jpg" : ".gif"}`
   }));
 
   const tempVal = document.getElementById("weatherTemp").value.trim();
