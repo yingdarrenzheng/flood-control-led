@@ -18,7 +18,7 @@
     {
       "id": 1,
       "zone": "西廠",
-      "timeSlot": "上午",
+      "timeSlot": "全天",
       "operations": [
         {
           "text": "光纖系統安裝",
@@ -31,7 +31,7 @@
     {
       "id": 2,
       "zone": "寫字樓",
-      "timeSlot": "上午",
+      "timeSlot": "全天",
       "operations": [
         {
           "text": "高空作業（離地面2米以上）",
@@ -87,7 +87,7 @@
     "conditionLabel": "多雲",
     "source": "manual",
     "temperature": 32,
-    "updateTime": "2026-08-22T09:47:17.995Z",
+    "updateTime": "2026-08-22T09:48:08.227Z",
     "warnings": [
       {
         "name": "hsww_amber",
@@ -95,5 +95,5 @@
       }
     ]
   },
-  "lastUpdated": "2026-08-22T09:47:17.995Z"
+  "lastUpdated": "2026-08-22T09:48:08.227Z"
 }
