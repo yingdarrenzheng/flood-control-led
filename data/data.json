@@ -82,12 +82,12 @@
     }
   ],
   "liveWeather": {
-    "condition": "rainy",
-    "conditionLabel": "雨",
+    "condition": "cloudy",
+    "conditionLabel": "多雲",
     "source": "manual",
-    "temperature": 30,
-    "updateTime": "2026-08-22T05:14:39.755Z",
+    "temperature": 31,
+    "updateTime": "2026-08-22T05:15:36.092Z",
     "warnings": []
   },
-  "lastUpdated": "2026-08-22T05:14:39.755Z"
+  "lastUpdated": "2026-08-22T05:15:36.092Z"
 }
