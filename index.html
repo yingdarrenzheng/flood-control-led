@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=896, initial-scale=1.0">
+  <title>高危工序管理看板</title>
+  <link rel="stylesheet" href="static/css/display.css">
+</head>
+<body>
+  <div class="led-frame">
+    <header class="led-header">
+      <div class="header-left">
+        <img src="static/images/logo_dsd.png" alt="渠務署 DSD" class="header-logo header-logo-dsd">
+        <img src="static/images/logo_aecom.png" alt="AECOM" class="header-logo header-logo-aecom">
+        <img src="static/images/logo_csbb.png" alt="中建-保華 CSBBJV" class="header-logo header-logo-csbb">
+      </div>
+      <div class="header-right">
+        <div class="header-weather-row">
+          <div class="weather-box">
+            <span class="weather-icon" id="weatherIcon">🌧</span>
+            <span class="weather-text" id="weatherText">--°C</span>
+          </div>
+          <div class="warning-badges" id="warningBadges"></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="led-title-bar" id="title">特別高危/高危工序管理看板</div>
+
+    <div class="led-table-wrap">
+      <table class="led-table">
+        <thead>
+          <tr>
+            <th class="col-no">序號</th>
+            <th class="col-zone">區域</th>
+            <th class="col-op"><span class="risk-special">特別高危(紅)</span>、<span class="risk-high">高危(藍)</span>工序</th>
+            <th class="col-measure">安全措施</th>
+            <th class="col-subcon">分判商</th>
+            <th class="col-check">檢查</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr><td colspan="6" class="loading">載入中...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <footer class="led-footer">
+      <span id="siteInfo">Contract No. DC/2024/11 洪水橋淨水設施第1期-土木工程</span>
+      <span id="liveDate">--</span>
+    </footer>
+  </div>
+
+  <script src="static/js/display.js"></script>
+</body>
+</html>
