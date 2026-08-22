@@ -18,7 +18,7 @@ body { padding: 20px; }
 }
 
 h1 {
-  font-size: 22px;
+  font-size: 24px;
   margin-bottom: 16px;
   display: flex;
   align-items: center;
@@ -108,7 +108,34 @@ h2 {
 .col-op { min-width: 300px; }
 .col-measure { min-width: 240px; }
 .col-subcon { min-width: 120px; }
-.col-action { width: 60px; text-align: center; }
+.col-action { width: 130px; text-align: center; }
+.col-action .btn { padding: 4px 8px; font-size: 12px; margin: 2px 1px; }
+
+/* History box */
+.history-box {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+.history-info { flex: 1; min-width: 0; }
+.history-meta { font-size: 12px; color: #6b7280; margin-bottom: 2px; }
+.history-ops { font-size: 13px; color: #222; line-height: 1.4; word-break: break-word; }
+.history-actions { flex-shrink: 0; display: flex; gap: 6px; }
+.history-actions .btn { padding: 5px 12px; font-size: 13px; }
 
 /* Buttons */
 .btn {

@@ -95,6 +95,7 @@ async function loadData() {
     fillForm();
     fillWeather();
     renderRows();
+    renderHistory();
     showStatus("資料已載入", "ok");
   } catch (e) {
     showStatus("載入失敗：" + e.message, "err");
@@ -110,7 +111,10 @@ async function loadData() {
 }
 
 function migrateOldFormat() {
+  if (!appData.rows) appData.rows = [];
+  if (!appData.history) appData.history = [];
   (appData.rows || []).forEach(row => {
+    if (row.id == null) row.id = Date.now() + Math.floor(Math.random() * 1000);
     if (!row.operations) {
       row.operations = (row.operation != null && row.operation !== "")
         ? [{ text: row.operation, riskType: row.riskType || "high" }]
@@ -141,6 +145,39 @@ function fillWeather() {
 
 // ---- 工序列表渲染 ----
 
+// 將目前 DOM 表格中的輸入值寫回 appData.rows（避免新增/刪除列時遺失已輸入內容）
+function syncFromDom() {
+  const trs = document.querySelectorAll("#rowsBody tr[data-index]");
+  const synced = [];
+  trs.forEach(tr => {
+    const get = (field) => {
+      const el = tr.querySelector(`[data-field="${field}"]`);
+      return el ? el.value : "";
+    };
+    const operations = [];
+    tr.querySelectorAll(".op-entry").forEach(entry => {
+      const riskEl = entry.querySelector('[data-op-field="riskType"]');
+      const textEl = entry.querySelector('[data-op-field="text"]');
+      operations.push({
+        text: textEl ? textEl.value.trim() : "",
+        riskType: riskEl ? riskEl.value : "high"
+      });
+    });
+    // 以 id（data-id）對應回原有 row，保留 id；否則新增值
+    const existingId = tr.dataset.id ? Number(tr.dataset.id) : null;
+    const orig = (existingId != null) ? appData.rows.find(r => r.id === existingId) : null;
+    synced.push({
+      id: orig ? orig.id : (existingId != null ? existingId : Date.now() + Math.floor(Math.random() * 1000)),
+      zone: get("zone"),
+      timeSlot: get("timeSlot") || "全天",
+      operations: operations,
+      safetyMeasures: get("safetyMeasures"),
+      subcontractor: get("subcontractor")
+    });
+  });
+  appData.rows = synced;
+}
+
 function renderRows() {
   const tbody = document.getElementById("rowsBody");
   tbody.innerHTML = "";
@@ -153,6 +190,7 @@ function renderRows() {
     if (!row.operations) row.operations = [];
     const tr = document.createElement("tr");
     tr.dataset.index = idx;
+    tr.dataset.id = row.id != null ? row.id : "";
     tr.innerHTML = `
       <td class="col-num">${idx + 1}</td>
       <td class="col-zone"><input type="text" data-field="zone" value="${escapeAttr(row.zone)}"></td>
@@ -169,7 +207,10 @@ function renderRows() {
           <option value="下午" ${row.timeSlot === "下午" ? "selected" : ""}>下午</option>
         </select>
       </td>
-      <td class="col-action"><button class="btn btn-danger btn-del-row">刪除</button></td>
+      <td class="col-action">
+        <button class="btn btn-secondary btn-to-history" title="存入歷史">⬇ 歷史</button>
+        <button class="btn btn-danger btn-del-row">刪除</button>
+      </td>
     `;
     tbody.appendChild(tr);
 
@@ -183,6 +224,7 @@ function renderRows() {
       container.appendChild(createOpEntry("high", ""));
     });
     tr.querySelector(".btn-del-row").addEventListener("click", () => deleteRow(idx));
+    tr.querySelector(".btn-to-history").addEventListener("click", () => moveRowToHistory(idx));
   });
 }
 
@@ -202,8 +244,9 @@ function createOpEntry(riskType, text) {
 }
 
 function addRow() {
+  syncFromDom();          // 先將現有輸入寫回 appData，避免遺失
   appData.rows.push({
-    id: Date.now(),
+    id: Date.now() + Math.floor(Math.random() * 1000),
     zone: "",
     timeSlot: "全天",
     operations: [{ text: "", riskType: "high" }],
@@ -214,8 +257,77 @@ function addRow() {
 }
 
 function deleteRow(idx) {
+  syncFromDom();
   appData.rows.splice(idx, 1);
   renderRows();
+}
+
+// ---- 工序歷史 ----
+// 結構：appData.history = [ { id, savedAt, row: {...} }, ... ]
+
+function moveRowToHistory(idx) {
+  syncFromDom();
+  const row = appData.rows[idx];
+  if (!row) return;
+  if (!appData.history) appData.history = [];
+  appData.history.unshift({
+    id: Date.now() + Math.floor(Math.random() * 1000),
+    savedAt: new Date().toISOString(),
+    row: row
+  });
+  appData.rows.splice(idx, 1);
+  renderRows();
+  renderHistory();
+  showStatus("已存入工序歷史（尚未儲存，請按「儲存並更新看板」）", "info");
+}
+
+function insertHistoryItem(hid) {
+  syncFromDom();
+  if (!appData.history) appData.history = [];
+  const hi = appData.history.find(h => h.id === hid);
+  if (!hi) return;
+  const clone = JSON.parse(JSON.stringify(hi.row));
+  clone.id = Date.now() + Math.floor(Math.random() * 1000);
+  appData.rows.push(clone);
+  renderRows();
+  showStatus("已從歷史插入工序（尚未儲存，請按「儲存並更新看板」）", "info");
+}
+
+function deleteHistoryItem(hid) {
+  if (!appData.history) return;
+  appData.history = appData.history.filter(h => h.id !== hid);
+  renderHistory();
+  showStatus("已刪除一筆歷史工序（尚未儲存，請按「儲存並更新看板」）", "info");
+}
+
+function renderHistory() {
+  const box = document.getElementById("historyBox");
+  if (!box) return;
+  const list = appData.history || [];
+  if (list.length === 0) {
+    box.innerHTML = `<p class="empty-hint">暫無工序歷史。在工序列表中按「⬇ 歷史」可將工序存入此處備用。</p>`;
+    return;
+  }
+  box.innerHTML = "";
+  list.forEach(h => {
+    const r = h.row || {};
+    const ops = (r.operations || []).map(o => (o.riskType === "special" ? "【特別高危】" : "【高危】") + (o.text || "")).join("；") || "（無工序內容）";
+    const div = document.createElement("div");
+    div.className = "history-item";
+    div.innerHTML = `
+      <div class="history-info">
+        <div class="history-meta">${escapeAttr(r.zone || "（未填區域）")} · ${escapeAttr(r.timeSlot || "")} · ${escapeAttr(r.subcontractor || "")} · 存入於 ${new Date(h.savedAt).toLocaleString("zh-HK")}</div>
+        <div class="history-ops">${escapeAttr(ops)}</div>
+      </div>
+      <div class="history-actions">
+        <button class="btn btn-primary btn-insert-history">插入</button>
+        <button class="btn btn-danger btn-del-history">刪除</button>
+      </div>
+    `;
+    div.querySelector(".btn-insert-history").addEventListener("click", () => insertHistoryItem(h.id));
+    div.querySelector(".btn-del-history").addEventListener("click", () => deleteHistoryItem(h.id));
+    box.appendChild(div);
+  });
 }
 
 // ---- 收集 & 儲存 ----
@@ -278,6 +390,7 @@ function collectData() {
     showSafetyIcons: appData.showSafetyIcons !== false,
     manualTemp: appData.manualTemp || "",
     rows: rows,
+    history: appData.history || [],
     liveWeather: liveWeather,
     lastUpdated: new Date().toISOString()
   };
@@ -319,6 +432,7 @@ async function saveData() {
     appData = payload;
     showStatus("已儲存！看板將在 1-2 分鐘後更新。", "ok");
     renderRows();
+    renderHistory();
   } catch (e) {
     showStatus("儲存失敗：" + e.message, "err");
   }
