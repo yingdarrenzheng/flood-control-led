@@ -87,7 +87,7 @@
     "conditionLabel": "多雲",
     "source": "manual",
     "temperature": 32,
-    "updateTime": "2026-08-22T09:47:07.956Z",
+    "updateTime": "2026-08-22T09:47:17.995Z",
     "warnings": [
       {
         "name": "hsww_amber",
@@ -95,5 +95,5 @@
       }
     ]
   },
-  "lastUpdated": "2026-08-22T09:47:07.958Z"
+  "lastUpdated": "2026-08-22T09:47:17.995Z"
 }
