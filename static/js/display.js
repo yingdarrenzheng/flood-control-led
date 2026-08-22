@@ -38,7 +38,7 @@ const WARNING_MAP = {
   WRAINB: "黑色暴雨警告",
   WRANA: "山泥傾瀉警告",
   WTMW: "熱帶氣旋警告",
-  WTS: "強烈季候風信號",
+  WTS: "雷暴警告",
   WHOT: "酷熱天氣警告",
   WCOLD: "寒冷天氣警告",
   WFIRA: "火災危險警告",
@@ -248,42 +248,64 @@ function parseHkoWeather(raw, warnInfo, hsww) {
     }
   }
 
-  // 警告訊息：優先使用 warningInfo API (code + name)，後備 rhrread.warningMessage
+  // 警告訊息：優先使用 warningInfo API 的 details[]（含 warningStatementCode），
+  // 後備 rhrread.warningMessage（純文字描述）。
+  // 註：warningInfo 實際結構為 { details: [ { warningStatementCode, contents:[...] } ] }，
+  // 並非舊版 { warnings:[ {code,name} ] }，故需按 details 解析。
   const warnings = [];
   const seen = new Set();
-  if (warnInfo && Array.isArray(warnInfo.warnings)) {
+  const pushWarning = (wtype, name) => {
+    const key = (name || "") + "|" + (wtype || "");
+    if (seen.has(key)) return;
+    seen.add(key);
+    const label = name || WARNING_MAP[wtype] || wtype || "天氣警告";
+    warnings.push({
+      type: wtype,
+      name: label,
+      icon: "static/images/warnings/" + resolveIcon(wtype, label),
+    });
+  };
+
+  if (warnInfo && Array.isArray(warnInfo.details)) {
+    for (const det of warnInfo.details) {
+      const code = det.warningStatementCode || "";
+      const firstLine = Array.isArray(det.contents) && det.contents.length > 0
+        ? det.contents[0]
+        : "";
+      // 由 WARNING_MAP 對照中文名，找不到時用描述首句
+      const name = WARNING_MAP[code] || firstLine || code;
+      pushWarning(code, name);
+    }
+  } else if (warnInfo && Array.isArray(warnInfo.warnings)) {
+    // 兼容舊版結構
     for (const w of warnInfo.warnings) {
       const wtype = w.code || "";
       const name = w.name || wtype;
-      const key = name + "|" + wtype;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      warnings.push({
-        type: wtype,
-        name: name,
-        icon: "static/images/warnings/" + resolveIcon(wtype, name),
-      });
+      pushWarning(wtype, name);
     }
   }
+
+  // 後備：rhrread.warningMessage 為字串陣列（純文字描述，如「…發出雷暴警告…」）
   const wm = raw.warningMessage;
   if (Array.isArray(wm)) {
     for (const w of wm) {
-      let wtype, name;
-      if (typeof w === "object" && w !== null) {
-        wtype = w.type || "";
-        name = w.name || wtype;
-      } else {
-        wtype = String(w);
-        name = wtype;
+      const text = typeof w === "string" ? w : (w && w.name ? w.name : "");
+      if (!text) continue;
+      // 從文字識別警告類型
+      let code = "";
+      if (text.includes("雷暴")) code = "WTS";
+      else if (text.includes("紅") && text.includes("暴雨")) code = "WRAINR";
+      else if (text.includes("黑") && text.includes("暴雨")) code = "WRAINB";
+      else if (text.includes("黃") && text.includes("暴雨")) code = "WRAINA";
+      else if (text.includes("山泥傾瀉")) code = "WRANA";
+      else if (text.includes("酷熱")) code = "WHOT";
+      else if (text.includes("寒冷")) code = "WCOLD";
+      else if (text.includes("熱帶氣旋") || text.includes("颱風") || /[一二三四五六七八九十]號/.test(text)) code = "WTMW";
+      else if (text.includes("強烈季候風")) code = "WTS";
+      // 文本後備只作補充：若主來源已涵蓋該 code 則跳過
+      if (code && !warnings.some(x => x.type === code)) {
+        pushWarning(code, WARNING_MAP[code] || text);
       }
-      const key = name + "|" + wtype;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      warnings.push({
-        type: wtype,
-        name: name,
-        icon: "static/images/warnings/" + resolveIcon(wtype, name),
-      });
     }
   }
 
