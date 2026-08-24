@@ -196,6 +196,18 @@ async function wbFetchDataJson() {
   return { sha: info.sha, data: content };
 }
 
+// 經 GitHub API 取得 data.json（公開倉無需令牌，即時反映最新提交，無 Pages 建置延遲）
+// 作為 raw.githubusercontent.com 的第二級回退，避免回退到本地陳舊靜態檔造成不同步。
+async function loadDataJsonViaApi() {
+  const r = await fetch(WB_API_BASE, {
+    headers: { "Accept": "application/vnd.github+json", "User-Agent": "flood-control-led-board" }
+  });
+  if (!r.ok) throw new Error("GitHub API HTTP " + r.status);
+  const info = await r.json();
+  const content = JSON.parse(decodeURIComponent(escape(atob(info.content.replace(/\s/g, "")))));
+  return content;
+}
+
 // 將最新天氣合併進 data.json 的 liveWeather 後推送（不動 rows / history）
 async function saveWeatherToBoard(weather) {
   const now = Date.now();
@@ -382,13 +394,17 @@ function render() {
     return r.json();
   });
   const rawUrl = "https://raw.githubusercontent.com/yingdarrenzheng/flood-control-led/main/data/data.json?v=" + Date.now();
-  const relUrl = "data/data.json?v=" + Date.now();
+  const relUrl = "data/data.json?v=" + Date.now();  // 僅作最後離線兜底
   (async () => {
     let data;
     try {
-      data = await loadJson(rawUrl);
-    } catch (e) {
-      data = await loadJson(relUrl);
+      data = await loadJson(rawUrl);          // 1) raw：即時、無 Pages 建置延遲
+    } catch (e1) {
+      try {
+        data = await loadDataJsonViaApi();    // 2) GitHub API：即時、無建置延遲
+      } catch (e2) {
+        data = await loadJson(relUrl);        // 3) 本地靜態檔：僅離線兜底
+      }
     }
     if (!data) {
       document.getElementById("tableBody").innerHTML =
@@ -630,6 +646,13 @@ window.addEventListener("DOMContentLoaded", () => {
   }
   tickClock();
   setInterval(tickClock, 1000);
-  setInterval(render, 30000);            // 每 30 秒刷新內容
+  setInterval(render, 10000);            // 每 10 秒刷新內容（線上即時，無 Pages 建置延遲）
+  // 後台儲存後即時刷新（同瀏覽器跨分頁同步，無須等待）
+  try {
+    const syncCh = new BroadcastChannel("flood-led-sync");
+    syncCh.addEventListener("message", (ev) => {
+      if (ev.data && ev.data.type === "data-updated") render();
+    });
+  } catch (e) {}
   scaleToFit();
 });
