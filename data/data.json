@@ -19,7 +19,7 @@
       "id": 2,
       "zone": "寫字樓",
       "morning": true,
-      "afternoon": false,
+      "afternoon": true,
       "operations": [
         {
           "text": "高空作業（離地面2米以上）",
@@ -58,7 +58,44 @@
       "subcontractor": "安達"
     }
   ],
-  "history": [],
+  "history": [
+    {
+      "id": 1787538275638,
+      "savedAt": "2026-08-24T02:24:34.669Z",
+      "row": {
+        "id": 2,
+        "zone": "寫字樓",
+        "morning": true,
+        "afternoon": true,
+        "operations": [
+          {
+            "text": "高空作業（離地面2米以上）",
+            "riskType": "high"
+          }
+        ],
+        "safetyMeasures": "工作平台、安全網、全身式安全帶",
+        "subcontractor": "興安"
+      }
+    },
+    {
+      "id": 1787538271007,
+      "savedAt": "2026-08-24T02:24:30.678Z",
+      "row": {
+        "id": 2,
+        "zone": "寫字樓",
+        "morning": true,
+        "afternoon": false,
+        "operations": [
+          {
+            "text": "高空作業（離地面2米以上）",
+            "riskType": "high"
+          }
+        ],
+        "safetyMeasures": "工作平台、安全網、全身式安全帶",
+        "subcontractor": "興安"
+      }
+    }
+  ],
   "liveWeather": {
     "temperature": 29,
     "condition": "sunshower",
@@ -67,5 +104,5 @@
     "updateTime": "2026-08-24T08:56:00+08:00",
     "source": "HKO"
   },
-  "lastUpdated": "2026-08-24T02:12:57.696Z"
+  "lastUpdated": "2026-08-24T02:24:36.446Z"
 }
