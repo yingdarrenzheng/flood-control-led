@@ -28,9 +28,13 @@
         {
           "text": "手提電工具",
           "riskType": "high"
+        },
+        {
+          "text": "高空工作(吊人籠)",
+          "riskType": "high"
         }
       ],
-      "safetyMeasures": "工作範圍圍封、使用被註冊電工檢查通過及登記的手提電工具、佩戴PPE",
+      "safetyMeasures": "工作範圍圍封、使用被註冊電工檢查通過及登記的手提電工具、佩戴PPE、佩戴安全帶",
       "subcontractor": "海龍"
     },
     {
@@ -53,6 +57,10 @@
         },
         {
           "text": "燒焊切割",
+          "riskType": "high"
+        },
+        {
+          "text": "",
           "riskType": "high"
         }
       ],
@@ -154,5 +162,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-08-24T06:55:19.833Z"
+  "lastUpdated": "2026-08-24T06:57:33.594Z"
 }
