@@ -18,7 +18,8 @@
     {
       "id": 2,
       "zone": "寫字樓",
-      "timeSlot": "上午",
+      "morning": true,
+      "afternoon": false,
       "operations": [
         {
           "text": "高空作業（離地面2米以上）",
@@ -31,7 +32,8 @@
     {
       "id": 3,
       "zone": "西廠",
-      "timeSlot": "上午",
+      "morning": true,
+      "afternoon": false,
       "operations": [
         {
           "text": "臨時用電接駁",
@@ -44,7 +46,8 @@
     {
       "id": 4,
       "zone": "全區",
-      "timeSlot": "上午",
+      "morning": true,
+      "afternoon": false,
       "operations": [
         {
           "text": "吊運作業",
@@ -57,7 +60,8 @@
     {
       "id": 5,
       "zone": "寫字樓",
-      "timeSlot": "下午",
+      "morning": false,
+      "afternoon": true,
       "operations": [
         {
           "text": "密閉空間進入",
@@ -75,7 +79,8 @@
       "row": {
         "id": 1,
         "zone": "西廠",
-        "timeSlot": "上午",
+        "morning": true,
+        "afternoon": false,
         "operations": [
           {
             "text": "光纖系統安裝",
