@@ -55,10 +55,24 @@ function initAuth() {
   document.getElementById("passInput").addEventListener("keydown", ev => {
     if (ev.key === "Enter") doLogin();
   });
-  document.getElementById("logoutBtn").addEventListener("click", () => {
-    sessionStorage.removeItem("admin_ok");
-    location.reload();
-  });
+  document.getElementById("logoutBtn").addEventListener("click", doLogout);
+}
+
+function doLogout() {
+  // 直接切換回登入畫面，不依賴 location.reload()，
+  // 避免部分瀏覽器/嵌入式環境下重新整理後仍停留在編輯狀態。
+  try { sessionStorage.removeItem("admin_ok"); } catch (e) {}
+  const ed = document.getElementById("editorSection");
+  const lg = document.getElementById("loginSection");
+  if (ed) ed.style.display = "none";
+  if (lg) lg.style.display = "block";
+  document.getElementById("logoutBtn").style.display = "none";
+  document.getElementById("loginBtn").style.display = "inline-flex";
+  document.getElementById("userInput").style.display = "inline-flex";
+  document.getElementById("passInput").style.display = "inline-flex";
+  if (document.getElementById("userInput")) document.getElementById("userInput").value = "";
+  if (document.getElementById("passInput")) document.getElementById("passInput").value = "";
+  showLoginStatus("已登出", "info");
 }
 
 function enterEditor() {
@@ -88,7 +102,15 @@ function showLoginStatus(msg, type) {
 
 async function loadData() {
   try {
-    const r = await fetch("data/data.json?t=" + Date.now());
+    // 優先從 raw.githubusercontent.com 讀取最新提交（即時、無 Pages 建置延遲）；
+    // 若該來源不可達（如網絡限制），回退到同目錄相對路徑（Pages 版本）。
+    let r = null;
+    try {
+      r = await fetch("https://raw.githubusercontent.com/yingdarrenzheng/flood-control-led/main/data/data.json?t=" + Date.now());
+    } catch (e) { r = null; }
+    if (!r || !r.ok) {
+      r = await fetch("data/data.json?t=" + Date.now());
+    }
     if (!r.ok) throw new Error("HTTP " + r.status);
     appData = await r.json();
     migrateOldFormat();
@@ -396,39 +418,55 @@ async function saveData() {
 
   showStatus("正在推送到 GitHub...", "info");
 
-  // 先取最新 sha（防止衝突）
-  try {
-    const gr = await fetch(API_BASE, { headers: patHeaders() });
-    if (gr.ok) {
-      const info = await gr.json();
-      fileSha = info.sha;
-    }
-  } catch (e) { /* 忽略 */ }
+  let lastErr = "未知錯誤";
+  // 與看板自動寫回（saveWeatherToBoard）可能同時提交而產生 sha 衝突（409/422），
+  // 故在每次嘗試前重新取得最新 sha 並重試，確保編輯與歷史刪除確實寫入。
+  for (let attempt = 0; attempt < 4; attempt++) {
+    // 每次嘗試前重新取得最新 sha（防止與看板自動寫回競爭）
+    try {
+      const gr = await fetch(API_BASE, { headers: patHeaders() });
+      if (gr.ok) {
+        const info = await gr.json();
+        fileSha = info.sha;
+      }
+    } catch (e) { /* 忽略 */ }
 
-  const body = {
-    message: `Update via online admin (${new Date().toLocaleString("zh-HK")})`,
-    content: content,
-  };
-  if (fileSha) body.sha = fileSha;
+    const body = {
+      message: `Update via online admin (${new Date().toLocaleString("zh-HK")})`,
+      content: content,
+    };
+    if (fileSha) body.sha = fileSha;
 
-  try {
-    const r = await fetch(API_BASE, {
-      method: "PUT",
-      headers: Object.assign(patHeaders(), { "Content-Type": "application/json" }),
-      body: JSON.stringify(body)
-    });
-    const result = await r.json();
-    if (!r.ok) {
-      throw new Error(result.message || `HTTP ${r.status}`);
+    try {
+      const r = await fetch(API_BASE, {
+        method: "PUT",
+        headers: Object.assign(patHeaders(), { "Content-Type": "application/json" }),
+        body: JSON.stringify(body)
+      });
+      if (r.ok) {
+        const result = await r.json();
+        fileSha = result.content.sha;
+        appData = payload;
+        showStatus("已儲存！看板將在數秒後自動更新。", "ok");
+        renderRows();
+        renderHistory();
+        return;
+      }
+      const errBody = await r.json().catch(() => ({}));
+      lastErr = errBody.message || ("HTTP " + r.status);
+      // 409/422 多為與看板自動寫回的 sha 衝突，稍後重試
+      if (r.status === 409 || r.status === 422) {
+        await new Promise(res => setTimeout(res, 1000));
+        continue;
+      }
+      showStatus("儲存失敗：" + lastErr, "err");
+      return;
+    } catch (e) {
+      lastErr = e.message;
+      await new Promise(res => setTimeout(res, 1000));
     }
-    fileSha = result.content.sha;
-    appData = payload;
-    showStatus("已儲存！看板將在 1-2 分鐘後更新。", "ok");
-    renderRows();
-    renderHistory();
-  } catch (e) {
-    showStatus("儲存失敗：" + e.message, "err");
   }
+  showStatus("儲存失敗（多次重試仍衝突）：" + lastErr, "err");
 }
 
 // ---- 工具 ----
