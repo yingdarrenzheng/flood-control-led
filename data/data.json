@@ -58,26 +58,7 @@
       "subcontractor": "安達"
     }
   ],
-  "history": [
-    {
-      "id": 1787537497999,
-      "savedAt": "2026-08-24T02:11:37.255Z",
-      "row": {
-        "id": 3,
-        "zone": "西廠",
-        "morning": true,
-        "afternoon": false,
-        "operations": [
-          {
-            "text": "臨時用電接駁",
-            "riskType": "high"
-          }
-        ],
-        "safetyMeasures": "持牌電工、漏電保護、電纜檢查",
-        "subcontractor": "海龍"
-      }
-    }
-  ],
+  "history": [],
   "liveWeather": {
     "temperature": 29,
     "condition": "sunshower",
@@ -86,5 +67,5 @@
     "updateTime": "2026-08-24T08:56:00+08:00",
     "source": "HKO"
   },
-  "lastUpdated": "2026-08-24T02:11:38.902Z"
+  "lastUpdated": "2026-08-24T02:12:47.646Z"
 }
