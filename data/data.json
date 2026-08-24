@@ -22,54 +22,102 @@
       "afternoon": true,
       "operations": [
         {
-          "text": "高空作業（離地面2米以上）",
+          "text": "寫字樓裝修",
+          "riskType": "high"
+        },
+        {
+          "text": "手提電工具",
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "工作平台、安全網、全身式安全帶",
-      "subcontractor": "興安"
+      "safetyMeasures": "工作範圍圍封、使用被註冊電工檢查通過及登記的手提電工具、佩戴PPE",
+      "subcontractor": "海龍"
     },
     {
       "id": 4,
-      "zone": "全區",
+      "zone": "西廠&東廠",
       "morning": true,
       "afternoon": true,
       "operations": [
         {
           "text": "吊運作業",
           "riskType": "high"
+        },
+        {
+          "text": "610通插工字椿",
+          "riskType": "high"
+        },
+        {
+          "text": "撞擊式工字椿",
+          "riskType": "high"
+        },
+        {
+          "text": "燒焊切割",
+          "riskType": "high"
         }
       ],
-      "safetyMeasures": "訊號員、警戒區、吊具檢查",
-      "subcontractor": "宏運"
+      "safetyMeasures": "吊運團隊 4+1、吊運5-3-3、機械圍封、提供安全出入通道、電線高掛、吊運許可證、熱工序許可證、佩戴PPE",
+      "subcontractor": "中基"
     },
     {
       "id": 5,
-      "zone": "寫字樓",
-      "morning": false,
+      "zone": "西廠",
+      "morning": true,
       "afternoon": true,
       "operations": [
         {
-          "text": "密閉空間進入",
+          "text": "吊運作業",
+          "riskType": "high"
+        },
+        {
+          "text": "風煤切割",
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "通風、氣體檢測、救援計劃",
-      "subcontractor": "安達"
+      "safetyMeasures": "吊運團隊 4+1、吊運5-3-3、機械圍封、提供安全出入通道、電線高掛、吊運許可證、熱工序許可證、佩戴PPE",
+      "subcontractor": "GME"
     },
     {
-      "id": 1787542249609,
-      "zone": "11111",
+      "id": 1787552333100,
+      "zone": "東廠",
       "morning": true,
-      "afternoon": false,
+      "afternoon": true,
       "operations": [
         {
-          "text": "",
+          "text": "鑽探",
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "",
-      "subcontractor": ""
+      "safetyMeasures": "機械圍封、提供安全出入通道、佩戴PPE",
+      "subcontractor": "德晟 "
+    },
+    {
+      "id": 1787552420260,
+      "zone": "東廠",
+      "morning": true,
+      "afternoon": true,
+      "operations": [
+        {
+          "text": "手提電工具(磨機)",
+          "riskType": "high"
+        }
+      ],
+      "safetyMeasures": "佩戴PPE、使用被註冊電工檢查通過及登記的手提電工具",
+      "subcontractor": "理大科技"
+    },
+    {
+      "id": 1787552608400,
+      "zone": "西廠&東廠",
+      "morning": true,
+      "afternoon": true,
+      "operations": [
+        {
+          "text": "-\t改建圍街板",
+          "riskType": "high"
+        }
+      ],
+      "safetyMeasures": "機械圍封、提供安全出入通道、佩戴PPE",
+      "subcontractor": "三興盛"
     }
   ],
   "history": [
@@ -106,5 +154,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-08-24T03:30:54.044Z"
+  "lastUpdated": "2026-08-24T06:50:54.866Z"
 }
