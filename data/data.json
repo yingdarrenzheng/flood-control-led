@@ -33,7 +33,7 @@
       "id": 3,
       "zone": "西廠",
       "morning": true,
-      "afternoon": false,
+      "afternoon": true,
       "operations": [
         {
           "text": "臨時用電接駁",
@@ -81,5 +81,5 @@
     "updateTime": "2026-08-24T08:56:00+08:00",
     "source": "HKO"
   },
-  "lastUpdated": "2026-08-24T02:08:32.367Z"
+  "lastUpdated": "2026-08-24T02:08:43.615Z"
 }
