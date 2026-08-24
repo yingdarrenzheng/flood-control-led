@@ -61,7 +61,7 @@
       "operations": [
         {
           "text": "密閉空間進入",
-          "riskType": "special"
+          "riskType": "high"
         }
       ],
       "safetyMeasures": "通風、氣體檢測、救援計劃",
@@ -88,12 +88,18 @@
     }
   ],
   "liveWeather": {
-    "condition": "rainy",
-    "conditionLabel": "雨",
-    "source": "manual",
     "temperature": 29,
-    "updateTime": "2026-08-22T12:52:53.774Z",
-    "warnings": []
+    "condition": "sunshower",
+    "conditionLabel": "短暫陽光有驟雨",
+    "warnings": [
+      {
+        "type": "WTS",
+        "name": "雷暴警告",
+        "icon": "static/images/warnings/ts.gif"
+      }
+    ],
+    "updateTime": "2026-08-24T07:02:00+08:00",
+    "source": "HKO"
   },
-  "lastUpdated": "2026-08-22T12:52:53.774Z"
+  "lastUpdated": "2026-08-23T23:59:27.998271Z"
 }
