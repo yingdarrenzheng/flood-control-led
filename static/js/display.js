@@ -14,6 +14,14 @@ const HKO_HSWW_URL = "https://data.weather.gov.hk/weatherAPI/opendata/hsww.php?l
 // 距離洪水橋最近的測站，按優先順序
 const STATION_PRIORITY = ["流浮山", "元朗公園", "屯門", "石崗", "荃灣城門谷", "赤鱲角"];
 
+// 最近一次從天文台成功抓取的即時天氣（記憶體快取）。
+// render() 每 10 秒重讀 data.json 時，若此值仍然新鮮（< 10 分鐘），
+// 優先顯示它，避免被 data.json 中陳舊的 liveWeather（如 warnings 為空）覆蓋，
+// 確保黃色/紅色/黑色暑熱警告等即時警告持續顯示。
+let __liveWeatherCache = null;   // 最近一次 fetchHkoWeather() 成功結果
+let __liveWeatherTs = 0;         // 快取時間戳
+const LIVE_WEATHER_TTL = 10 * 60 * 1000; // 10 分鐘新鮮期
+
 // HKO 官方天氣符號代號 → 與天文台完全一致的標籤與 emoji
 // 參考：香港天文台天氣符號說明（現時天氣 icon 代號 50–99）
 const HKO_ICON_LABEL = {
@@ -212,34 +220,40 @@ async function saveWeatherToBoard(weather) {
   const now = Date.now();
   if (now - wbLastSave < WB_MIN_SAVE_INTERVAL) return; // 防抖
   wbLastSave = now;
-  try {
-    const { sha, data } = await wbFetchDataJson();
-    const payload = Object.assign({}, data);
-    payload.liveWeather = Object.assign({}, weather, {
-      source: "hko-auto",
-      updateTime: new Date().toISOString(),
-    });
-    payload.lastUpdated = new Date().toISOString();
-    const jsonStr = JSON.stringify(payload, null, 2);
-    const content = btoa(unescape(encodeURIComponent(jsonStr)));
-    const body = {
-      message: `Auto update weather from HKO (${new Date().toLocaleString("zh-HK")})`,
-      content: content,
-      sha: sha,
-    };
-    const r = await fetch(WB_API_BASE, {
-      method: "PUT",
-      headers: Object.assign(wbPatHeaders(), { "Content-Type": "application/json" }),
-      body: JSON.stringify(body),
-      cache: "no-store"
-    });
-    if (!r.ok) {
+  // 409/422 版本衝突重試：每次重新取 sha，最多 3 次（後台保存與看板寫回可能競爭）
+  const MAX_RETRY = 3;
+  for (let attempt = 0; attempt <= MAX_RETRY; attempt++) {
+    try {
+      const { sha, data } = await wbFetchDataJson();
+      const payload = Object.assign({}, data);
+      payload.liveWeather = Object.assign({}, weather, {
+        source: "hko-auto",
+        updateTime: new Date().toISOString(),
+      });
+      payload.lastUpdated = new Date().toISOString();
+      const jsonStr = JSON.stringify(payload, null, 2);
+      const content = btoa(unescape(encodeURIComponent(jsonStr)));
+      const body = {
+        message: `Auto update weather from HKO (${new Date().toLocaleString("zh-HK")})`,
+        content: content,
+        sha: sha,
+      };
+      const r = await fetch(WB_API_BASE, {
+        method: "PUT",
+        headers: Object.assign(wbPatHeaders(), { "Content-Type": "application/json" }),
+        body: JSON.stringify(body),
+        cache: "no-store"
+      });
+      if (r.ok) return; // 寫回成功
+      if (r.status === 409 || r.status === 422) continue; // 版本衝突 → 重試
       const err = await r.json().catch(() => ({}));
       throw new Error(err.message || ("HTTP " + r.status));
+    } catch (e) {
+      if (attempt < MAX_RETRY && /fetch|HTTP|sha|衝突/.test(e.message)) continue;
+      // 寫回失敗不影響看板顯示（前端已即時顯示），靜默處理
+      console.warn("天氣自動寫回失敗（不影響顯示）：", e.message);
+      return;
     }
-  } catch (e) {
-    // 寫回失敗不影響看板顯示（前端已即時顯示），靜默處理
-    console.warn("天氣自動寫回失敗（不影響顯示）：", e.message);
   }
 }
 
@@ -480,9 +494,13 @@ function render() {
       document.getElementById("siteInfo").textContent =
         (data.contractNo || "") + " " + (data.projectName || "");
 
-      // 即時顯示預載天氣 (從 data.json 的 liveWeather 欄位)
-      if (data.liveWeather) {
-        renderWeather(data.liveWeather);
+      // 即時顯示天氣：優先使用記憶體中最近一次天文台即時抓取結果（新鮮期 10 分鐘內），
+      // 其次才用 data.json 的 liveWeather 欄位——避免陳舊 liveWeather 覆蓋即時暑熱警告。
+      const liveW = (__liveWeatherCache && Date.now() - __liveWeatherTs < LIVE_WEATHER_TTL)
+        ? __liveWeatherCache
+        : (data.liveWeather || null);
+      if (liveW) {
+        renderWeather(liveW);
       }
     } catch (err) {
       document.getElementById("tableBody").innerHTML =
@@ -559,6 +577,10 @@ function renderWeather(weather) {
 function fetchWeather() {
   fetchHkoWeather()
     .then(w => {
+      // 記憶體快取最新即時天氣：render() 每 10 秒重讀 data.json 時優先顯示此值，
+      // 確保 hsww 等工作暑熱警告不會被 data.json 中陳舊的 liveWeather 覆蓋。
+      __liveWeatherCache = w;
+      __liveWeatherTs = Date.now();
       renderWeather(w);
       // 自動將天文台天氣寫回看板（data.json / GitHub Pages）
       saveWeatherToBoard(w);
