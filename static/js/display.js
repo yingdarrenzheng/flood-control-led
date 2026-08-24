@@ -404,13 +404,22 @@ function render() {
           return `<span class="${cls}">${escapeHtml(op.text)}</span>`;
         }).join("<br>");
 
+        // 檢查時段：由 morning / afternoon 布林推算顯示文字
+        const m = !!(row.morning);
+        const a = !!(row.afternoon);
+        let slotText = "";
+        if (m && a) slotText = "上午/下午";
+        else if (m) slotText = "上午";
+        else if (a) slotText = "下午";
+        else slotText = "";
+
         tr.innerHTML = `
           <td>${idx + 1}</td>
           <td>${escapeHtml(row.zone)}</td>
           <td>${opsHtml}</td>
           <td>${escapeHtml(row.safetyMeasures)}</td>
           <td>${escapeHtml(row.subcontractor)}</td>
-          <td>${escapeHtml(row.timeSlot || "上午")}</td>
+          <td>${escapeHtml(slotText)}</td>
         `;
         tbody.appendChild(tr);
       });
