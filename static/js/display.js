@@ -401,8 +401,8 @@ function parseHkoWeather(raw, warnInfo, hsww) {
 // --- 渲染函數 ---
 
 function render() {
-  // 優先從 raw.githubusercontent.com 讀取最新提交（即時、無 Pages 建置延遲）；
-  // 若不可達則回退到同目錄相對路徑（Pages 版本）。加時間戳防快取。
+  // 優先從 GitHub API 讀取最新提交（無 CDN 快取、即時反映最新寫入，避免 raw 邊緣節點滯後）；
+  // 其次 raw.githubusercontent.com；最後才用本地靜態檔作離線兜底。加時間戳防快取。
   const loadJson = (url) => fetch(url, { cache: "no-store" }).then(r => {
     if (!r.ok) throw new Error("無法載入資料 (" + r.status + ")");
     return r.json();
@@ -412,12 +412,12 @@ function render() {
   (async () => {
     let data;
     try {
-      data = await loadJson(rawUrl);          // 1) raw：即時、無 Pages 建置延遲
+      data = await loadDataJsonViaApi();        // 1) GitHub API：即時、無建置延遲、無 CDN 快取
     } catch (e1) {
       try {
-        data = await loadDataJsonViaApi();    // 2) GitHub API：即時、無建置延遲
+        data = await loadJson(rawUrl);          // 2) raw：一般即時，作 API 失敗備援
       } catch (e2) {
-        data = await loadJson(relUrl);        // 3) 本地靜態檔：僅離線兜底
+        data = await loadJson(relUrl);          // 3) 本地靜態檔：僅離線兜底
       }
     }
     if (!data) {
