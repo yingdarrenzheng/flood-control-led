@@ -78,11 +78,25 @@
       "afternoon": false,
       "operations": [
         {
-          "text": "222",
+          "text": "",
           "riskType": "high"
         }
       ],
       "safetyMeasures": "1111",
+      "subcontractor": ""
+    },
+    {
+      "id": 1787535454511,
+      "zone": "",
+      "morning": true,
+      "afternoon": false,
+      "operations": [
+        {
+          "text": "222",
+          "riskType": "high"
+        }
+      ],
+      "safetyMeasures": "",
       "subcontractor": ""
     }
   ],
@@ -95,5 +109,5 @@
     "updateTime": "2026-08-24T08:56:00+08:00",
     "source": "HKO"
   },
-  "lastUpdated": "2026-08-24T01:37:09.521Z"
+  "lastUpdated": "2026-08-24T01:37:36.089Z"
 }
