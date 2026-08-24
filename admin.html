@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>高危工序看板後台</title>
-  <link rel="stylesheet" href="static/css/admin.css?v=4">
+  <link rel="stylesheet" href="static/css/admin.css?v=5">
 </head>
 <body>
   <div class="admin-wrap">
@@ -47,39 +47,16 @@
       </div>
     </div>
 
-    <h2>天氣資訊（後備資料 — 看板已自動連接香港天文台）</h2>
+    <h2>香港天文台 / 勞工處 即時連線檢查</h2>
     <p class="hint" style="margin:0 0 10px;color:#666;font-size:13px;">
-      看板會自動從香港天文台取得即時天氣及生效警告（每 5 分鐘刷新）。
-      以下欄位僅作為天文台連線失敗時的後備顯示，可按按鈕一鍵取樣。
+      看板已自動即時連接香港天文台（現時天氣、生效警告）及勞工處（工作暑熱警告），每 5 分鐘刷新。
+      下方按鈕可即時測試連線並顯示當前數值，供確認連線正常、資料與天文台一致。
     </p>
     <div style="margin-bottom:10px;">
-      <button type="button" id="btnFetchHko" class="btn">🔄 從天文台取得現時天氣</button>
+      <button type="button" id="btnFetchHko" class="btn">🔄 即時連線檢查（天文台 + 勞工處）</button>
       <span id="hkoStatus" style="margin-left:10px;color:#666;font-size:13px;"></span>
     </div>
-    <div class="form-grid">
-      <div class="field">
-        <label for="weatherCondition">天氣狀況</label>
-        <select id="weatherCondition">
-          <option value="sunny">晴</option>
-          <option value="cloudy">多雲</option>
-          <option value="rainy">雨</option>
-          <option value="thunderstorm">雷暴</option>
-          <option value="hot">酷熱</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="weatherLabel">天氣標籤（顯示文字）</label>
-        <input type="text" id="weatherLabel" placeholder="例如：雨">
-      </div>
-      <div class="field">
-        <label for="weatherTemp">氣溫（°C）</label>
-        <input type="number" id="weatherTemp" step="1" placeholder="例如：30">
-      </div>
-      <div class="field">
-        <label for="weatherWarnings">生效警告（逗號分隔，留空則無）</label>
-        <input type="text" id="weatherWarnings" placeholder="例如：tc8ne,rainb">
-      </div>
-    </div>
+    <div id="hkoLiveInfo" class="hko-live-info" style="display:none;"></div>
 
     <h2>工序列表</h2>
     <div class="row-editor">
@@ -121,6 +98,6 @@
     </div>
   </div>
 
-  <script src="static/js/admin.js?v=5"></script>
+  <script src="static/js/admin.js?v=6"></script>
 </body>
 </html>
