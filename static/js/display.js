@@ -14,23 +14,53 @@ const HKO_HSWW_URL = "https://data.weather.gov.hk/weatherAPI/opendata/hsww.php?l
 // 距離洪水橋最近的測站，按優先順序
 const STATION_PRIORITY = ["流浮山", "元朗公園", "屯門", "石崗", "荃灣城門谷", "赤鱲角"];
 
-const ICON_CONDITION = {
-  sunny: [50, 51, 52, 53],
-  cloudy: [54, 60, 61, 80, 81, 82, 83],
-  rainy: [62, 63, 64, 65, 66, 67, 68, 69],
-  thunderstorm: [70, 71],
-  hot: [91],
-  cold: [90],
+// HKO 官方天氣符號代號 → 與天文台完全一致的標籤與 emoji
+// 參考：香港天文台天氣符號說明（現時天氣 icon 代號 50–99）
+const HKO_ICON_LABEL = {
+  50: { label: "晴", icon: "☀" },
+  51: { label: "大致晴朗", icon: "🌤" },
+  52: { label: "天晴", icon: "☀" },
+  53: { label: "短暫陽光", icon: "🌤" },
+  54: { label: "短暫陽光有驟雨", icon: "🌦" },
+  55: { label: "日間短暫時間有陽光", icon: "🌤" },
+  56: { label: "短暫時間有陽光", icon: "🌤" },
+  57: { label: "天晴，有一兩陣驟雨", icon: "🌦" },
+  58: { label: "天晴，有幾陣驟雨", icon: "🌦" },
+  59: { label: "天晴，有雨", icon: "🌧" },
+  60: { label: "短暫陽光", icon: "🌤" },
+  61: { label: "有幾陣驟雨", icon: "🌦" },
+  62: { label: "有微雨", icon: "🌦" },
+  63: { label: "有雨", icon: "🌧" },
+  64: { label: "有雷暴", icon: "⛈" },
+  65: { label: "有雨", icon: "🌧" },
+  66: { label: "有雨", icon: "🌧" },
+  67: { label: "有毛毛雨", icon: "🌦" },
+  68: { label: "有微雨", icon: "🌦" },
+  69: { label: "有雨", icon: "🌧" },
+  70: { label: "雷暴", icon: "⛈" },
+  71: { label: "局部地區有雷暴", icon: "⛈" },
+  72: { label: "有幾陣雷暴", icon: "⛈" },
+  73: { label: "有雷暴及驟雨", icon: "⛈" },
+  80: { label: "多雲", icon: "☁" },
+  81: { label: "大致多雲", icon: "🌥" },
+  82: { label: "煙霞", icon: "🌫" },
+  83: { label: "薄霧", icon: "🌫" },
+  84: { label: "乾燥", icon: "🏜" },
+  85: { label: "吹東北風", icon: "💨" },
+  86: { label: "吹東風", icon: "💨" },
+  87: { label: "吹東南風", icon: "💨" },
+  88: { label: "吹西南風", icon: "💨" },
+  89: { label: "吹西北風", icon: "💨" },
+  90: { label: "寒冷", icon: "❄" },
+  91: { label: "酷熱", icon: "🌡" },
+  92: { label: "極酷熱", icon: "🌡" },
+  93: { label: "有霧", icon: "🌫" },
+  94: { label: "有霾", icon: "🌫" },
+  99: { label: "天氣不穩定", icon: "🌦" },
 };
 
-const CONDITION_LABEL = {
-  sunny: "晴",
-  cloudy: "多雲",
-  rainy: "雨",
-  thunderstorm: "雷暴",
-  hot: "酷熱",
-  cold: "寒冷",
-};
+// 回退（未知 code）預設
+const HKO_ICON_FALLBACK = { label: "多雲", icon: "☁" };
 
 const WARNING_MAP = {
   WRAINA: "雷暴警告",
@@ -48,15 +78,21 @@ const WARNING_MAP = {
   WMSGNL: "海面強風信號",
 };
 
-// 天氣 emoji 對照
+// 天氣 emoji / 標籤對照（供離線、預載、demo 等後備路徑使用；與 HKO_ICON_LABEL 對齊）
 const weatherMap = {
   sunny: { icon: "☀", label: "晴" },
   cloudy: { icon: "☁", label: "多雲" },
   rainy: { icon: "🌧", label: "雨" },
   thunderstorm: { icon: "⛈", label: "雷暴" },
   hot: { icon: "🌡", label: "酷熱" },
-  cold: { icon: "❄", label: "寒冷" }
+  cold: { icon: "❄", label: "寒冷" },
+  sunshower: { icon: "🌦", label: "短暫陽光有驟雨" },
 };
+
+// 由 HKO icon code 取得 { label, icon }（與天文台標籤一致）
+function hkoIcon(code) {
+  return HKO_ICON_LABEL[code] || HKO_ICON_FALLBACK;
+}
 
 // --- 工具函數 ---
 
@@ -235,17 +271,22 @@ function parseHkoWeather(raw, warnInfo, hsww) {
     temperature = temps[0].value;
   }
 
-  // 天氣狀況：從 icon code 判斷
+  // 天氣狀況：由 HKO icon code 直接對照官方標籤（與天文台完全一致）
   const iconCodes = raw.icon || [];
-  let condition = "cloudy";
+  let condition = "cloudy";          // 後備（未知 code）對應 weatherMap.cloudy
+  let conditionLabel = "多雲";
   if (iconCodes.length > 0) {
     const code = parseInt(iconCodes[iconCodes.length - 1]);
-    for (const [cond, codes] of Object.entries(ICON_CONDITION)) {
-      if (codes.includes(code)) {
-        condition = cond;
-        break;
-      }
-    }
+    const info = hkoIcon(code);
+    conditionLabel = info.label;
+    // 用 label 反推一個 weatherMap key，供 emoji 後備路徑使用
+    if (info.label === "短暫陽光有驟雨") condition = "sunshower";
+    else if (info.label.includes("雷暴")) condition = "thunderstorm";
+    else if (info.label === "酷熱" || info.label === "極酷熱") condition = "hot";
+    else if (info.label === "寒冷") condition = "cold";
+    else if (info.label.includes("雨") || info.label.includes("驟雨") || info.label.includes("毛毛雨") || info.label.includes("微雨")) condition = "rainy";
+    else if (info.label === "晴" || info.label === "天晴" || info.label.includes("晴朗") || info.label.includes("陽光")) condition = "sunny";
+    else condition = "cloudy";
   }
 
   // 警告訊息：優先使用 warningInfo API 的 details[]（含 warningStatementCode），
