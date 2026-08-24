@@ -101,6 +101,15 @@
     </div>
   </div>
 
-  <script src="static/js/admin.js?v=8"></script>
+  <!-- 儲存後提示彈窗：後台將於 1-2 分鐘後更新 -->
+  <div id="syncModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#fff; border-radius:10px; padding:26px 28px; max-width:360px; width:86%; text-align:center; box-shadow:0 10px 40px rgba(0,0,0,0.25);">
+      <div style="font-size:19px; font-weight:700; color:#111827; margin-bottom:12px;">資料已儲存</div>
+      <div style="font-size:14px; color:#374151; line-height:1.7; margin-bottom:22px;">後台將於 <b>1-2 分鐘</b> 後完成更新。</div>
+      <button id="syncModalClose" class="btn btn-primary" style="min-width:120px;">確定</button>
+    </div>
+  </div>
+
+  <script src="static/js/admin.js?v=9"></script>
 </body>
 </html>
