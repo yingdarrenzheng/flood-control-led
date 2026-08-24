@@ -70,42 +70,9 @@
       ],
       "safetyMeasures": "通風、氣體檢測、救援計劃",
       "subcontractor": "安達"
-    },
-    {
-      "id": 1787535454511,
-      "zone": "",
-      "morning": true,
-      "afternoon": false,
-      "operations": [
-        {
-          "text": "222",
-          "riskType": "high"
-        }
-      ],
-      "safetyMeasures": "",
-      "subcontractor": ""
     }
   ],
-  "history": [
-    {
-      "id": 1787537109023,
-      "savedAt": "2026-08-24T02:05:08.663Z",
-      "row": {
-        "id": 1787534823262,
-        "zone": "222",
-        "morning": true,
-        "afternoon": true,
-        "operations": [
-          {
-            "text": "222",
-            "riskType": "high"
-          }
-        ],
-        "safetyMeasures": "1111",
-        "subcontractor": ""
-      }
-    }
-  ],
+  "history": [],
   "liveWeather": {
     "temperature": 29,
     "condition": "sunshower",
@@ -114,5 +81,5 @@
     "updateTime": "2026-08-24T08:56:00+08:00",
     "source": "HKO"
   },
-  "lastUpdated": "2026-08-24T02:05:10.168Z"
+  "lastUpdated": "2026-08-24T02:06:29.743Z"
 }
