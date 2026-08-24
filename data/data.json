@@ -47,7 +47,7 @@
       "id": 4,
       "zone": "全區",
       "morning": true,
-      "afternoon": true,
+      "afternoon": false,
       "operations": [
         {
           "text": "吊運作業",
@@ -55,7 +55,7 @@
         }
       ],
       "safetyMeasures": "訊號員、警戒區、吊具檢查",
-      "subcontractor": "宏運qq"
+      "subcontractor": "宏運"
     },
     {
       "id": 5,
@@ -72,26 +72,7 @@
       "subcontractor": "安達"
     }
   ],
-  "history": [
-    {
-      "id": 1787392095354,
-      "savedAt": "2026-08-22T09:48:15.003Z",
-      "row": {
-        "id": 1,
-        "zone": "西廠",
-        "morning": true,
-        "afternoon": false,
-        "operations": [
-          {
-            "text": "光纖系統安裝",
-            "riskType": "high"
-          }
-        ],
-        "safetyMeasures": "佩戴安全帽、安全帶，設置圍欄",
-        "subcontractor": "海龍"
-      }
-    }
-  ],
+  "history": [],
   "liveWeather": {
     "temperature": 29,
     "condition": "sunshower",
@@ -100,5 +81,5 @@
     "updateTime": "2026-08-24T08:56:00+08:00",
     "source": "HKO"
   },
-  "lastUpdated": "2026-08-24T01:22:54.506Z"
+  "lastUpdated": "2026-08-24T01:23:11.802Z"
 }
