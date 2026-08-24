@@ -30,6 +30,9 @@ async function sha256Hex(str) {
 }
 
 function initAuth() {
+  // 登出按鈕必須在所有路徑下都綁定（含已登入直接 enterEditor 後 return 的情況），
+  // 否則刷新頁面後登出按鈕雖可見但無 listener，點擊無反應。
+  document.getElementById("logoutBtn").addEventListener("click", doLogout);
   if (sessionStorage.getItem("admin_ok") === "1") {
     enterEditor();
     return;
@@ -55,24 +58,36 @@ function initAuth() {
   document.getElementById("passInput").addEventListener("keydown", ev => {
     if (ev.key === "Enter") doLogin();
   });
-  document.getElementById("logoutBtn").addEventListener("click", doLogout);
 }
 
 function doLogout() {
-  // 直接切換回登入畫面，不依賴 location.reload()，
-  // 避免部分瀏覽器/嵌入式環境下重新整理後仍停留在編輯狀態。
+  // 清除登入狀態 + 清空記憶體中的資料，防止重新登入後顯示舊資料
   try { sessionStorage.removeItem("admin_ok"); } catch (e) {}
+  appData = null;
+  fileSha = null;
+  // 切換回登入畫面
   const ed = document.getElementById("editorSection");
   const lg = document.getElementById("loginSection");
   if (ed) ed.style.display = "none";
   if (lg) lg.style.display = "block";
   document.getElementById("logoutBtn").style.display = "none";
   document.getElementById("loginBtn").style.display = "inline-flex";
-  document.getElementById("userInput").style.display = "inline-flex";
-  document.getElementById("passInput").style.display = "inline-flex";
-  if (document.getElementById("userInput")) document.getElementById("userInput").value = "";
-  if (document.getElementById("passInput")) document.getElementById("passInput").value = "";
-  showLoginStatus("已登出", "info");
+  const ui = document.getElementById("userInput");
+  const pi = document.getElementById("passInput");
+  if (ui) { ui.style.display = "inline-flex"; ui.value = ""; }
+  if (pi) { pi.style.display = "inline-flex"; pi.value = ""; }
+  // 清空表單與列表，防止殘留舊資料
+  ["contractNo", "projectName", "title"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = "";
+  });
+  const tbody = document.getElementById("rowsBody");
+  if (tbody) tbody.innerHTML = '<tr><td colspan="7" class="empty-hint">暫無工序，請先登入</td></tr>';
+  const hbox = document.getElementById("historyBox");
+  if (hbox) hbox.innerHTML = '<p class="empty-hint">暫無工序歷史。</p>';
+  const st = document.getElementById("status");
+  if (st) st.style.display = "none";
+  showLoginStatus("已登出，請重新登入", "info");
 }
 
 function enterEditor() {
@@ -101,7 +116,7 @@ function showLoginStatus(msg, type) {
 // 經 GitHub API 取得 data.json（公開倉無需令牌；即時、無 Pages 建置延遲）
 // 作為 raw.githubusercontent.com 的第二級回退，避免回退到本地陳舊靜態檔造成不同步。
 async function fetchApiDataJson() {
-  const r = await fetch(API_BASE, { headers: Object.assign(patHeaders(), { "Accept": "application/vnd.github+json" }) });
+  const r = await fetch(API_BASE, { headers: Object.assign(patHeaders(), { "Accept": "application/vnd.github+json" }), cache: "no-store" });
   if (!r.ok) throw new Error("GitHub API HTTP " + r.status);
   const info = await r.json();
   return JSON.parse(decodeURIComponent(escape(atob(info.content.replace(/\s/g, "")))));
@@ -115,7 +130,7 @@ async function loadData() {
     let source = "";
     // 1) 優先 raw.githubusercontent.com（即時、無 Pages 建置延遲）
     try {
-      const r = await fetch("https://raw.githubusercontent.com/yingdarrenzheng/flood-control-led/main/data/data.json?t=" + Date.now());
+      const r = await fetch("https://raw.githubusercontent.com/yingdarrenzheng/flood-control-led/main/data/data.json?t=" + Date.now(), { cache: "no-store" });
       if (r.ok) { loaded = await r.json(); source = "raw"; }
     } catch (e) {}
     // 2) 次選 GitHub API（公開倉無需令牌，即時反映最新提交）
@@ -124,7 +139,7 @@ async function loadData() {
     }
     // 3) 最後才用本地靜態檔（僅離線兜底，可能陳舊）
     if (!loaded) {
-      const r = await fetch("data/data.json?t=" + Date.now());
+      const r = await fetch("data/data.json?t=" + Date.now(), { cache: "no-store" });
       if (!r.ok) throw new Error("HTTP " + r.status);
       loaded = await r.json(); source = "local";
     }
@@ -142,7 +157,7 @@ async function loadData() {
   }
   // 同時取得 GitHub 檔案 sha（用於更新時的衝突檢測）
   try {
-    const gr = await fetch(API_BASE, { headers: patHeaders() });
+    const gr = await fetch(API_BASE, { headers: patHeaders(), cache: "no-store" });
     if (gr.ok) {
       const info = await gr.json();
       fileSha = info.sha;
@@ -247,7 +262,7 @@ function renderRows() {
         </div>
       </td>
       <td class="col-action">
-        <button class="btn btn-secondary btn-to-history" title="存入歷史">⬇ 歷史</button>
+        <button class="btn btn-secondary btn-to-history" title="複製至歷史">📋 歷史</button>
         <button class="btn btn-danger btn-del-row">刪除</button>
       </td>
     `;
@@ -310,15 +325,17 @@ function moveRowToHistory(idx) {
   const row = appData.rows[idx];
   if (!row) return;
   if (!appData.history) appData.history = [];
+  // 複製一份到工序歷史（列表中仍保留原條目，不移除）
+  const clone = JSON.parse(JSON.stringify(row));
   appData.history.unshift({
     id: Date.now() + Math.floor(Math.random() * 1000),
     savedAt: new Date().toISOString(),
-    row: row
+    row: clone
   });
-  appData.rows.splice(idx, 1);
+  // 不再從工序列表中移除——保留原條目
   renderRows();
   renderHistory();
-  showStatus("已存入工序歷史（尚未儲存，請按「儲存並更新看板」）", "info");
+  showStatus("已複製至工序歷史（列表仍保留原工序，尚未儲存，請按「儲存並更新看板」）", "info");
 }
 
 function insertHistoryItem(hid) {
@@ -443,7 +460,7 @@ async function saveData() {
   for (let attempt = 0; attempt < 4; attempt++) {
     // 每次嘗試前重新取得最新 sha（防止與看板自動寫回競爭）
     try {
-      const gr = await fetch(API_BASE, { headers: patHeaders() });
+      const gr = await fetch(API_BASE, { headers: patHeaders(), cache: "no-store" });
       if (gr.ok) {
         const info = await gr.json();
         fileSha = info.sha;
@@ -460,7 +477,8 @@ async function saveData() {
       const r = await fetch(API_BASE, {
         method: "PUT",
         headers: Object.assign(patHeaders(), { "Content-Type": "application/json" }),
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
+        cache: "no-store"
       });
       if (r.ok) {
         const result = await r.json();
@@ -590,9 +608,9 @@ async function fetchHkoToForm() {
   const t0 = Date.now();
   try {
     const [rhrR, warnR, hswwR] = await Promise.all([
-      fetch("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=tc"),
-      fetch("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=warningInfo&lang=tc").catch(() => null),
-      fetch("https://data.weather.gov.hk/weatherAPI/opendata/hsww.php?lang=tc").catch(() => null),
+      fetch("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=tc", { cache: "no-store" }),
+      fetch("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=warningInfo&lang=tc", { cache: "no-store" }).catch(() => null),
+      fetch("https://data.weather.gov.hk/weatherAPI/opendata/hsww.php?lang=tc", { cache: "no-store" }).catch(() => null),
     ]);
     if (!rhrR.ok) throw new Error("HTTP " + rhrR.status);
     const rhr = await rhrR.json();
@@ -661,7 +679,10 @@ window.addEventListener("DOMContentLoaded", () => {
   initAuth();
   document.getElementById("addRowBtn").addEventListener("click", addRow);
   document.getElementById("saveBtn").addEventListener("click", saveData);
-  document.getElementById("refreshBtn").addEventListener("click", loadData);
+  document.getElementById("refreshBtn").addEventListener("click", () => {
+    // 強制從伺服器重新載入頁面（繞過瀏覽器快取），確保顯示最新資料
+    location.replace(location.pathname + '?t=' + Date.now());
+  });
   document.getElementById("btnFetchHko").addEventListener("click", fetchHkoToForm);
   // 後台儲存後提示彈窗：關閉邏輯（按鈕 / 點擊遮罩）
   const syncModal = document.getElementById("syncModal");
