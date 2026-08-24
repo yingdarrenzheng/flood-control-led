@@ -128,14 +128,14 @@ async function loadData() {
   try {
     let loaded = null;
     let source = "";
-    // 1) 優先 raw.githubusercontent.com（即時、無 Pages 建置延遲）
-    try {
-      const r = await fetch("https://raw.githubusercontent.com/yingdarrenzheng/flood-control-led/main/data/data.json?t=" + Date.now(), { cache: "no-store" });
-      if (r.ok) { loaded = await r.json(); source = "raw"; }
-    } catch (e) {}
-    // 2) 次選 GitHub API（公開倉無需令牌，即時反映最新提交）
+    // 1) 優先 GitHub API（無 CDN 快取、即時反映最新提交，避免 raw 邊緣節點滯後讀到舊值）
+    try { loaded = await fetchApiDataJson(); source = "api"; } catch (e) {}
+    // 2) 次選 raw.githubusercontent.com（一般情況即時，作 API 失敗時的備援）
     if (!loaded) {
-      try { loaded = await fetchApiDataJson(); source = "api"; } catch (e) {}
+      try {
+        const r = await fetch("https://raw.githubusercontent.com/yingdarrenzheng/flood-control-led/main/data/data.json?t=" + Date.now(), { cache: "no-store" });
+        if (r.ok) { loaded = await r.json(); source = "raw"; }
+      } catch (e) {}
     }
     // 3) 最後才用本地靜態檔（僅離線兜底，可能陳舊）
     if (!loaded) {
