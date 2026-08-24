@@ -169,7 +169,7 @@ function syncFromDom() {
     synced.push({
       id: orig ? orig.id : (existingId != null ? existingId : Date.now() + Math.floor(Math.random() * 1000)),
       zone: get("zone"),
-      timeSlot: get("timeSlot") || "全天",
+      timeSlot: get("timeSlot") || "上午",
       operations: operations,
       safetyMeasures: get("safetyMeasures"),
       subcontractor: get("subcontractor")
@@ -202,7 +202,6 @@ function renderRows() {
       <td class="col-subcon"><input type="text" data-field="subcontractor" value="${escapeAttr(row.subcontractor)}"></td>
       <td class="col-slot">
         <select data-field="timeSlot">
-          <option value="全天" ${row.timeSlot === "全天" ? "selected" : ""}>全天</option>
           <option value="上午" ${row.timeSlot === "上午" ? "selected" : ""}>上午</option>
           <option value="下午" ${row.timeSlot === "下午" ? "selected" : ""}>下午</option>
         </select>
@@ -248,7 +247,7 @@ function addRow() {
   appData.rows.push({
     id: Date.now() + Math.floor(Math.random() * 1000),
     zone: "",
-    timeSlot: "全天",
+    timeSlot: "上午",
     operations: [{ text: "", riskType: "high" }],
     safetyMeasures: "",
     subcontractor: ""
@@ -353,7 +352,7 @@ function collectData() {
     rows.push({
       id: (appData.rows[idx] && appData.rows[idx].id) || Date.now() + Math.random(),
       zone: get("zone"),
-      timeSlot: get("timeSlot") || "全天",
+      timeSlot: get("timeSlot") || "上午",
       operations: operations,
       safetyMeasures: get("safetyMeasures"),
       subcontractor: get("subcontractor")
