@@ -193,3 +193,29 @@ h2 {
   color: #6b7280; font-size: 12px; cursor: pointer;
 }
 .btn-add-op:hover { background: #f3f4f6; color: #374151; border-color: #6b7280; }
+
+/* 即時連線檢查（唯讀顯示） */
+.hko-live-info {
+  margin: 4px 0 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #f8fafc;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+.hko-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 3px 0;
+  border-bottom: 1px dashed #eef2f7;
+}
+.hko-row:last-child { border-bottom: none; }
+.hko-k {
+  flex: 0 0 140px;
+  color: #6b7280;
+  font-weight: 600;
+}
+.hko-v { color: #111827; }
+.hko-v.ok { color: #16a34a; font-weight: 600; }
+.hko-v.err { color: #dc2626; font-weight: 600; }
