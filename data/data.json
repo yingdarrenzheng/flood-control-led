@@ -28,10 +28,6 @@
         {
           "text": "手提電工具",
           "riskType": "high"
-        },
-        {
-          "text": "高空工作(吊人籠)",
-          "riskType": "high"
         }
       ],
       "safetyMeasures": "工作範圍圍封、使用被註冊電工檢查通過及登記的手提電工具、佩戴PPE、佩戴安全帶",
@@ -60,11 +56,11 @@
           "riskType": "high"
         },
         {
-          "text": "",
+          "text": "高空工作(吊人籠)",
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "吊運團隊 4+1、吊運5-3-3、機械圍封、提供安全出入通道、電線高掛、吊運許可證、熱工序許可證、佩戴PPE",
+      "safetyMeasures": "吊運團隊 4+1、吊運5-3-3、機械圍封、提供安全出入通道、電線高掛、吊運許可證、熱工序許可證、佩戴PPE、佩戴安全帶",
       "subcontractor": "中基"
     },
     {
@@ -162,5 +158,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-08-24T06:58:59.361Z"
+  "lastUpdated": "2026-08-24T07:00:24.585Z"
 }
