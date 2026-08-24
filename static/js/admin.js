@@ -93,7 +93,6 @@ async function loadData() {
     appData = await r.json();
     migrateOldFormat();
     fillForm();
-    fillWeather();
     renderRows();
     renderHistory();
     showStatus("資料已載入", "ok");
@@ -138,18 +137,6 @@ function fillForm() {
   document.getElementById("contractNo").value = appData.contractNo || "";
   document.getElementById("projectName").value = appData.projectName || "";
   document.getElementById("title").value = appData.title || "";
-}
-
-function fillWeather() {
-  const lw = appData.liveWeather || {};
-  document.getElementById("weatherCondition").value = lw.condition || "cloudy";
-  document.getElementById("weatherLabel").value = lw.conditionLabel || "";
-  document.getElementById("weatherTemp").value = lw.temperature != null ? lw.temperature : "";
-  const warnStr = (lw.warnings || []).map(w => {
-    const icon = w.icon || "";
-    return icon.replace("static/images/warnings/", "").replace(/\.(gif|svg|png|jpg|jpeg)$/, "");
-  }).join(",");
-  document.getElementById("weatherWarnings").value = warnStr;
 }
 
 // ---- 工序列表渲染 ----
@@ -376,24 +363,14 @@ function collectData() {
     });
   });
 
-  // 構建 liveWeather
-  const warnStrRaw = document.getElementById("weatherWarnings").value.trim();
-  const warnCodes = warnStrRaw ? warnStrRaw.split(",").map(s => s.trim()).filter(Boolean) : [];
-  const warnings = warnCodes.map(code => ({
-    name: code,
-    icon: `static/images/warnings/${code}${code.startsWith("hsww_") ? ".jpg" : ".gif"}`
-  }));
-
-  const tempVal = document.getElementById("weatherTemp").value.trim();
-  const temp = tempVal !== "" ? parseInt(tempVal) : null;
-
-  const liveWeather = {
-    condition: document.getElementById("weatherCondition").value,
-    conditionLabel: document.getElementById("weatherLabel").value.trim(),
-    source: "manual",
-    temperature: temp,
+  // liveWeather 保留看板自動即時連線天文台所寫回之最新值（後台不再人工填寫）
+  const liveWeather = appData.liveWeather || {
+    condition: "cloudy",
+    conditionLabel: "多雲",
+    source: "none",
+    temperature: null,
     updateTime: new Date().toISOString(),
-    warnings: warnings
+    warnings: []
   };
 
   return {
@@ -517,10 +494,26 @@ const HKO_RESOLVE_ICON = [
   [n => n.includes("十號"), "tc10"],
 ];
 
+// HKO 官方天氣符號代號 → 標籤（與看板 display.js 一致，供即時連線檢查顯示）
+const HKO_ICON_LABEL = {
+  50: "晴", 51: "大致晴朗", 52: "天晴", 53: "短暫陽光", 54: "短暫陽光有驟雨",
+  55: "日間短暫時間有陽光", 56: "短暫時間有陽光", 57: "天晴，有一兩陣驟雨",
+  58: "天晴，有幾陣驟雨", 59: "天晴，有雨", 60: "短暫陽光", 61: "有幾陣驟雨",
+  62: "有微雨", 63: "有雨", 64: "有雷暴", 65: "有雨", 66: "有雨", 67: "有毛毛雨",
+  68: "有微雨", 69: "有雨", 70: "雷暴", 71: "局部地區有雷暴", 72: "有幾陣雷暴",
+  73: "有雷暴及驟雨", 80: "多雲", 81: "大致多雲", 82: "煙霞", 83: "薄霧",
+  84: "乾燥", 85: "吹東北風", 86: "吹東風", 87: "吹東南風", 88: "吹西南風",
+  89: "吹西北風", 90: "寒冷", 91: "酷熱", 92: "極酷熱", 93: "有霧", 94: "有霾", 99: "天氣不穩定"
+};
+
+// 即時連線檢查：抓取香港天文台（現時天氣 + 生效警告）及勞工處（工作暑熱警告），
+// 以唯讀方式顯示當前數值，供確認連線正常、資料與天文台一致。
 async function fetchHkoToForm() {
   const statusEl = document.getElementById("hkoStatus");
-  statusEl.textContent = "正在連接天文台...";
+  const infoEl = document.getElementById("hkoLiveInfo");
+  statusEl.textContent = "正在連接天文台 / 勞工處...";
   statusEl.style.color = "#666";
+  const t0 = Date.now();
   try {
     const [rhrR, warnR, hswwR] = await Promise.all([
       fetch("https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=tc"),
@@ -531,55 +524,58 @@ async function fetchHkoToForm() {
     const rhr = await rhrR.json();
     const warnInfo = warnR && warnR.ok ? await warnR.json() : null;
     const hswwInfo = hswwR && hswwR.ok ? await hswwR.json() : null;
+    const elapsed = Date.now() - t0;
 
     // 氣溫（優先測站）
-    let temp = null;
+    let temp = null, tempPlace = "";
     const temps = (rhr.temperature && rhr.temperature.data) || [];
     for (const st of HKO_STATION_PRIORITY) {
       const hit = temps.find(t => t.place === st && t.value != null);
-      if (hit) { temp = hit.value; break; }
+      if (hit) { temp = hit.value; tempPlace = hit.place; break; }
     }
-    if (temp === null && temps.length) temp = temps[0].value;
+    if (temp === null && temps.length) { temp = temps[0].value; tempPlace = temps[0].place; }
 
-    // 天氣狀況
+    // 天氣狀況標籤
     const codes = rhr.icon || [];
-    let condition = "cloudy";
+    let condLabel = "多雲";
     if (codes.length) {
       const c = parseInt(codes[codes.length - 1]);
-      for (const [cond, list] of Object.entries(HKO_ICON_CONDITION)) {
-        if (list.includes(c)) { condition = cond; break; }
-      }
+      condLabel = HKO_ICON_LABEL[c] || "多雲";
     }
 
-    // 生效警告 → 圖示代碼
-    const warnCodes = [];
-    if (warnInfo && Array.isArray(warnInfo.warnings)) {
-      for (const w of warnInfo.warnings) {
-        const name = w.name || w.code || "";
-        let icon = null;
-        for (const [match, code] of HKO_RESOLVE_ICON) {
-          if (match(name)) { icon = code; break; }
-        }
-        if (icon) warnCodes.push(icon);
+    // 生效警告（天文台 warningInfo.details，含人類可讀描述）
+    const warnList = [];
+    if (warnInfo && Array.isArray(warnInfo.details)) {
+      for (const det of warnInfo.details) {
+        const name = (det.contents && det.contents[0]) || det.warningStatementCode || "（警告）";
+        warnList.push(name);
       }
+    } else if (warnInfo && Array.isArray(warnInfo.warnings)) {
+      for (const w of warnInfo.warnings) warnList.push(w.name || w.code || "（警告）");
     }
 
     // 勞工處工作暑熱警告
+    let hswwLabel = "無";
     if (hswwInfo && hswwInfo.hsww && hswwInfo.hsww.actionCode !== "CANCEL" && hswwInfo.hsww.actionCode !== "REVOKE") {
-      const lvlMap = { AMBER: "hsww_amber", RED: "hsww_red", BLACK: "hsww_black" };
-      const code = lvlMap[hswwInfo.hsww.warningLevel];
-      if (code) warnCodes.push(code);
+      const lvlMap = { AMBER: "黃色工作暑熱警告", RED: "紅色工作暑熱警告", BLACK: "黑色工作暑熱警告" };
+      hswwLabel = lvlMap[hswwInfo.hsww.warningLevel] || "工作暑熱警告（生效）";
     }
 
-    document.getElementById("weatherCondition").value = condition;
-    const condLabelMap = { sunny: "晴", cloudy: "多雲", rainy: "雨", thunderstorm: "雷暴", hot: "酷熱", cold: "寒冷" };
-    document.getElementById("weatherLabel").value = condLabelMap[condition] || "多雲";
-    document.getElementById("weatherTemp").value = temp != null ? temp : "";
-    document.getElementById("weatherWarnings").value = warnCodes.join(",");
+    infoEl.style.display = "block";
+    infoEl.innerHTML = `
+      <div class="hko-row"><span class="hko-k">連線狀態</span><span class="hko-v ok">正常（即時，耗時 ${elapsed}ms）</span></div>
+      <div class="hko-row"><span class="hko-k">更新時間</span><span class="hko-v">${new Date().toLocaleString("zh-HK", { hour12: false })}</span></div>
+      <div class="hko-row"><span class="hko-k">氣溫</span><span class="hko-v">${temp != null ? temp : "--"}°C${tempPlace ? "（" + escapeAttr(tempPlace) + "）" : ""}</span></div>
+      <div class="hko-row"><span class="hko-k">天氣狀況</span><span class="hko-v">${escapeAttr(condLabel)}${codes.length ? "（icon " + escapeAttr(String(codes[codes.length - 1])) + "）" : ""}</span></div>
+      <div class="hko-row"><span class="hko-k">天文台生效警告</span><span class="hko-v">${warnList.length ? escapeAttr(warnList.join("；")) : "無"}</span></div>
+      <div class="hko-row"><span class="hko-k">勞工處工作暑熱警告</span><span class="hko-v">${escapeAttr(hswwLabel)}</span></div>
+    `;
 
-    statusEl.textContent = `已取得（更新於 ${new Date().toLocaleTimeString("zh-HK", { hour12: false })}）`;
+    statusEl.textContent = `連線正常，即時資料已取得（${elapsed}ms）`;
     statusEl.style.color = "#16a34a";
   } catch (e) {
+    infoEl.style.display = "block";
+    infoEl.innerHTML = `<div class="hko-row"><span class="hko-k">連線狀態</span><span class="hko-v err">失敗：${escapeAttr(e.message)}</span></div>`;
     statusEl.textContent = "連線失敗：" + e.message;
     statusEl.style.color = "#dc2626";
   }
