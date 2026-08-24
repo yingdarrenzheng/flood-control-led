@@ -41,7 +41,7 @@
         }
       ],
       "safetyMeasures": "持牌電工、漏電保護、電纜檢查",
-      "subcontractor": "海龍"
+      "subcontractor": "海龍11"
     },
     {
       "id": 4,
@@ -81,5 +81,5 @@
     "updateTime": "2026-08-24T08:56:00+08:00",
     "source": "HKO"
   },
-  "lastUpdated": "2026-08-24T01:26:24.602Z"
+  "lastUpdated": "2026-08-24T01:26:31.730Z"
 }
