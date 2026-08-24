@@ -72,20 +72,6 @@
       "subcontractor": "安達"
     },
     {
-      "id": 1787534823262,
-      "zone": "222",
-      "morning": true,
-      "afternoon": true,
-      "operations": [
-        {
-          "text": "222",
-          "riskType": "high"
-        }
-      ],
-      "safetyMeasures": "1111",
-      "subcontractor": ""
-    },
-    {
       "id": 1787535454511,
       "zone": "",
       "morning": true,
@@ -100,7 +86,26 @@
       "subcontractor": ""
     }
   ],
-  "history": [],
+  "history": [
+    {
+      "id": 1787537109023,
+      "savedAt": "2026-08-24T02:05:08.663Z",
+      "row": {
+        "id": 1787534823262,
+        "zone": "222",
+        "morning": true,
+        "afternoon": true,
+        "operations": [
+          {
+            "text": "222",
+            "riskType": "high"
+          }
+        ],
+        "safetyMeasures": "1111",
+        "subcontractor": ""
+      }
+    }
+  ],
   "liveWeather": {
     "temperature": 29,
     "condition": "sunshower",
@@ -109,5 +114,5 @@
     "updateTime": "2026-08-24T08:56:00+08:00",
     "source": "HKO"
   },
-  "lastUpdated": "2026-08-24T02:02:47.664Z"
+  "lastUpdated": "2026-08-24T02:05:10.168Z"
 }
