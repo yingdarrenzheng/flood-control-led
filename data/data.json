@@ -30,7 +30,7 @@
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "工作範圍圍封、使用被註冊電工檢查通過及登記的手提電工具、佩戴PPE、佩戴安全帶",
+      "safetyMeasures": "工作範圍圍封、使用被註冊電工檢查通過及登記的手提電工具、佩戴PPE(耳塞、眼罩、口罩)、佩戴安全帶",
       "subcontractor": "海龍"
     },
     {
@@ -60,7 +60,7 @@
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "吊運團隊 4+1、吊運5-3-3、機械圍封、提供安全出入通道、電線高掛、吊運許可證、熱工序許可證、佩戴PPE、佩戴安全帶",
+      "safetyMeasures": "吊運團隊 4+1、吊運5-3-3、機械圍封、提供安全出入通道、電線高掛、吊運許可證、熱工序許可證、佩戴PPE(耳塞、眼罩、口罩)、佩戴安全帶",
       "subcontractor": "中基"
     },
     {
@@ -78,7 +78,7 @@
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "吊運團隊 4+1、吊運5-3-3、機械圍封、提供安全出入通道、電線高掛、吊運許可證、熱工序許可證、佩戴PPE",
+      "safetyMeasures": "吊運團隊 4+1、吊運5-3-3、機械圍封、提供安全出入通道、電線高掛、吊運許可證、熱工序許可證、佩戴PPE(耳塞、眼罩、口罩)",
       "subcontractor": "GME"
     },
     {
@@ -92,7 +92,7 @@
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "機械圍封、提供安全出入通道、佩戴PPE",
+      "safetyMeasures": "機械圍封、提供安全出入通道、佩戴PPE(耳塞、眼罩、口罩)、佩戴安全帶",
       "subcontractor": "德晟 "
     },
     {
@@ -106,7 +106,7 @@
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "佩戴PPE、使用被註冊電工檢查通過及登記的手提電工具",
+      "safetyMeasures": "佩戴PPE(耳塞、眼罩、口罩)、使用被註冊電工檢查通過及登記的手提電工具",
       "subcontractor": "理大科技"
     },
     {
@@ -120,7 +120,7 @@
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "機械圍封、提供安全出入通道、佩戴PPE",
+      "safetyMeasures": "機械圍封、提供安全出入通道、佩戴PPE(耳塞、眼罩、口罩)",
       "subcontractor": "三興盛"
     }
   ],
@@ -158,5 +158,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-08-24T07:00:24.585Z"
+  "lastUpdated": "2026-08-24T07:04:37.113Z"
 }
