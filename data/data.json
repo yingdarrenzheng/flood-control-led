@@ -72,32 +72,13 @@
       "subcontractor": "安達等待"
     }
   ],
-  "history": [
-    {
-      "id": 1787392095354,
-      "savedAt": "2026-08-22T09:48:15.003Z",
-      "row": {
-        "id": 1,
-        "zone": "西廠",
-        "morning": true,
-        "afternoon": false,
-        "operations": [
-          {
-            "text": "光纖系統安裝",
-            "riskType": "high"
-          }
-        ],
-        "safetyMeasures": "佩戴安全帽、安全帶，設置圍欄",
-        "subcontractor": "海龍"
-      }
-    }
-  ],
+  "history": [],
   "liveWeather": {
-    "condition": "",
+    "condition": "cloudy",
     "conditionLabel": "短暫陽光有驟雨",
     "source": "manual",
     "temperature": 29,
-    "updateTime": "2026-08-24T00:54:47.301Z",
+    "updateTime": "2026-08-24T01:00:25.084Z",
     "warnings": [
       {
         "name": "ts",
@@ -105,5 +86,5 @@
       }
     ]
   },
-  "lastUpdated": "2026-08-24T00:54:47.301Z"
+  "lastUpdated": "2026-08-24T01:00:25.084Z"
 }
