@@ -60,24 +60,6 @@
   ],
   "history": [
     {
-      "id": 1787538275638,
-      "savedAt": "2026-08-24T02:24:34.669Z",
-      "row": {
-        "id": 2,
-        "zone": "寫字樓",
-        "morning": true,
-        "afternoon": true,
-        "operations": [
-          {
-            "text": "高空作業（離地面2米以上）",
-            "riskType": "high"
-          }
-        ],
-        "safetyMeasures": "工作平台、安全網、全身式安全帶",
-        "subcontractor": "興安"
-      }
-    },
-    {
       "id": 1787538271007,
       "savedAt": "2026-08-24T02:24:30.678Z",
       "row": {
@@ -110,5 +92,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-08-24T02:35:34.000Z"
+  "lastUpdated": "2026-08-24T02:49:32.092Z"
 }
