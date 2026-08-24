@@ -19,7 +19,7 @@
       "id": 2,
       "zone": "寫字樓",
       "morning": true,
-      "afternoon": true,
+      "afternoon": false,
       "operations": [
         {
           "text": "高空作業（離地面2米以上）",
@@ -60,13 +60,13 @@
   ],
   "history": [
     {
-      "id": 1787537333294,
-      "savedAt": "2026-08-24T02:08:52.935Z",
+      "id": 1787537497999,
+      "savedAt": "2026-08-24T02:11:37.255Z",
       "row": {
         "id": 3,
         "zone": "西廠",
         "morning": true,
-        "afternoon": true,
+        "afternoon": false,
         "operations": [
           {
             "text": "臨時用電接駁",
@@ -86,5 +86,5 @@
     "updateTime": "2026-08-24T08:56:00+08:00",
     "source": "HKO"
   },
-  "lastUpdated": "2026-08-24T02:09:06.182Z"
+  "lastUpdated": "2026-08-24T02:11:38.902Z"
 }
