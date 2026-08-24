@@ -463,7 +463,7 @@ function render() {
           <td>${opsHtml}</td>
           <td>${escapeHtml(row.safetyMeasures)}</td>
           <td>${escapeHtml(row.subcontractor)}</td>
-          <td>${escapeHtml(slotText)}</td>
+          <td class="col-slot">${escapeHtml(slotText)}</td>
         `;
         tbody.appendChild(tr);
       });
