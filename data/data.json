@@ -97,7 +97,7 @@
     "conditionLabel": "短暫陽光有驟雨",
     "source": "manual",
     "temperature": 29,
-    "updateTime": "2026-08-24T00:54:44.229Z",
+    "updateTime": "2026-08-24T00:54:47.301Z",
     "warnings": [
       {
         "name": "ts",
@@ -105,5 +105,5 @@
       }
     ]
   },
-  "lastUpdated": "2026-08-24T00:54:44.229Z"
+  "lastUpdated": "2026-08-24T00:54:47.301Z"
 }
