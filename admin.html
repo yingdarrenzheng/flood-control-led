@@ -89,7 +89,7 @@
 
     <h2>工序歷史（備用庫）</h2>
     <p class="hint" style="margin:0 0 10px;color:#666;font-size:13px;">
-      在上方工序列表按「⬇ 歷史」可將整行工序存入此處；需要時按「插入」即可放回當前列表，或按「刪除」永久移除。
+      在上方工序列表按「📋 歷史」可將工序複製至歷史備用（列表中仍保留原工序）；需要時按「插入」即可放回當前列表，或按「刪除」永久移除。
       所有變更須按「儲存並更新看板」才會生效並同步看板。
     </p>
     <div id="historyBox" class="history-box">
@@ -110,6 +110,12 @@
     </div>
   </div>
 
-  <script src="static/js/admin.js?v=9"></script>
+  <script>
+    // bfcache 偵測：若頁面來自前進/後退快取，強制重新載入以確保最新資料
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted) location.reload();
+    });
+  </script>
+  <script src="static/js/admin.js?v=10"></script>
 </body>
 </html>
