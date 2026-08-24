@@ -19,7 +19,7 @@
       "id": 2,
       "zone": "寫字樓",
       "morning": true,
-      "afternoon": false,
+      "afternoon": true,
       "operations": [
         {
           "text": "高空作業（離地面2米以上）",
@@ -33,7 +33,7 @@
       "id": 3,
       "zone": "西廠",
       "morning": true,
-      "afternoon": false,
+      "afternoon": true,
       "operations": [
         {
           "text": "臨時用電接駁",
@@ -47,7 +47,7 @@
       "id": 4,
       "zone": "全區",
       "morning": true,
-      "afternoon": false,
+      "afternoon": true,
       "operations": [
         {
           "text": "吊運作業",
@@ -60,7 +60,7 @@
     {
       "id": 5,
       "zone": "寫字樓",
-      "morning": false,
+      "morning": true,
       "afternoon": true,
       "operations": [
         {
@@ -93,18 +93,17 @@
     }
   ],
   "liveWeather": {
-    "temperature": 29,
-    "condition": "sunshower",
+    "condition": "",
     "conditionLabel": "短暫陽光有驟雨",
+    "source": "manual",
+    "temperature": 29,
+    "updateTime": "2026-08-24T00:54:44.229Z",
     "warnings": [
       {
-        "type": "WTS",
-        "name": "雷暴警告",
+        "name": "ts",
         "icon": "static/images/warnings/ts.gif"
       }
-    ],
-    "updateTime": "2026-08-24T07:02:00+08:00",
-    "source": "HKO"
+    ]
   },
-  "lastUpdated": "2026-08-23T23:59:27.998271Z"
+  "lastUpdated": "2026-08-24T00:54:44.229Z"
 }
