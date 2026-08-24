@@ -47,7 +47,7 @@
       "id": 4,
       "zone": "全區",
       "morning": true,
-      "afternoon": false,
+      "afternoon": true,
       "operations": [
         {
           "text": "吊運作業",
@@ -100,5 +100,5 @@
     "updateTime": "2026-08-24T08:56:00+08:00",
     "source": "HKO"
   },
-  "lastUpdated": "2026-08-24T01:08:48.403Z"
+  "lastUpdated": "2026-08-24T01:22:46.707Z"
 }
