@@ -18,7 +18,7 @@
     {
       "id": 2,
       "zone": "寫字樓",
-      "timeSlot": "全天",
+      "timeSlot": "上午",
       "operations": [
         {
           "text": "高空作業（離地面2米以上）",
@@ -31,7 +31,7 @@
     {
       "id": 3,
       "zone": "西廠",
-      "timeSlot": "全天",
+      "timeSlot": "上午",
       "operations": [
         {
           "text": "臨時用電接駁",
@@ -75,7 +75,7 @@
       "row": {
         "id": 1,
         "zone": "西廠",
-        "timeSlot": "全天",
+        "timeSlot": "上午",
         "operations": [
           {
             "text": "光纖系統安裝",
