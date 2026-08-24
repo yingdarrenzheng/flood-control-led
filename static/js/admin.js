@@ -466,12 +466,14 @@ async function saveData() {
         const result = await r.json();
         fileSha = result.content.sha;
         appData = payload;
-        showStatus("已儲存！看板將即時同步更新。", "ok");
-        // 通知同一瀏覽器中的看板即時刷新（無須等待 1-2 分鐘）
+        showStatus("已儲存！", "ok");
+        // 通知同一瀏覽器中的看板即時刷新
         try {
           const ch = new BroadcastChannel("flood-led-sync");
           ch.postMessage({ type: "data-updated", t: Date.now() });
         } catch (e) {}
+        // 彈出獨立提示：後台將於 1-2 分鐘後更新
+        showSyncModal();
         renderRows();
         renderHistory();
         return;
@@ -501,6 +503,16 @@ function showStatus(msg, type) {
   el.className = "status " + (type || "");
   el.style.display = "block";
   if (type === "ok") setTimeout(() => { el.style.display = "none"; }, 5000);
+}
+
+// 儲存後獨立提示彈窗：後台將於 1-2 分鐘後更新
+function showSyncModal() {
+  const m = document.getElementById("syncModal");
+  if (m) m.style.display = "flex";
+}
+function hideSyncModal() {
+  const m = document.getElementById("syncModal");
+  if (m) m.style.display = "none";
 }
 
 function escapeAttr(s) {
@@ -651,4 +663,9 @@ window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("saveBtn").addEventListener("click", saveData);
   document.getElementById("refreshBtn").addEventListener("click", loadData);
   document.getElementById("btnFetchHko").addEventListener("click", fetchHkoToForm);
+  // 後台儲存後提示彈窗：關閉邏輯（按鈕 / 點擊遮罩）
+  const syncModal = document.getElementById("syncModal");
+  const syncModalClose = document.getElementById("syncModalClose");
+  if (syncModalClose) syncModalClose.addEventListener("click", hideSyncModal);
+  if (syncModal) syncModal.addEventListener("click", (e) => { if (e.target === syncModal) hideSyncModal(); });
 });
