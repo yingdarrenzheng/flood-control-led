@@ -63,10 +63,10 @@ const HKO_ICON_LABEL = {
 const HKO_ICON_FALLBACK = { label: "多雲", icon: "☁" };
 
 const WARNING_MAP = {
-  WRAINA: "雷暴警告",
+  WRAINA: "黃色暴雨警告",
   WRAINR: "紅色暴雨警告",
   WRAINB: "黑色暴雨警告",
-  WRANA: "山泥傾瀉警告",
+  WRNA: "山泥傾瀉警告",
   WTMW: "熱帶氣旋警告",
   WTS: "雷暴警告",
   WHOT: "酷熱天氣警告",
@@ -74,8 +74,7 @@ const WARNING_MAP = {
   WFIRA: "火災危險警告",
   WFROST: "霜凍警告",
   WNL: "新界北部水浸特別報告",
-  WMSGN: "強風信號",
-  WMSGNL: "海面強風信號",
+  WMSGN: "強烈季候風信號",
 };
 
 // 天氣 emoji / 標籤對照（供離線、預載、demo 等後備路徑使用；與 HKO_ICON_LABEL 對齊）
@@ -155,11 +154,10 @@ function resolveIcon(wtype, name) {
   if (n.includes("九號")) return "tc9.gif";
   if (n.includes("十號")) return "tc10.gif";
   const fallback = {
-    WRAINA: "ts.gif", WRAINR: "rainr.gif", WRAINB: "rainb.gif",
-    WRANA: "landslip.gif", WTMW: "tc8c.gif", WTS: "sms.gif",
+    WRAINA: "raina.gif", WRAINR: "rainr.gif", WRAINB: "rainb.gif",
+    WRNA: "landslip.gif", WTMW: "tc8c.gif", WTS: "ts.gif",
     WHOT: "vhot.gif", WCOLD: "cold.gif", WFIRA: "firer.gif",
     WFROST: "frost.gif", WNL: "ntfl.gif", WMSGN: "sms.gif",
-    WMSGNL: "sms.gif",
   };
   return fallback[wtype] || "ts.gif";
 }
@@ -189,7 +187,7 @@ function wbPatHeaders() {
 
 // 從 GitHub 取得 data.json 的 sha 與內容（用於衝突檢測與合併）
 async function wbFetchDataJson() {
-  const infoR = await fetch(WB_API_BASE, { headers: wbPatHeaders() });
+  const infoR = await fetch(WB_API_BASE, { headers: wbPatHeaders(), cache: "no-store" });
   if (!infoR.ok) throw new Error("取得檔案資訊失敗 HTTP " + infoR.status);
   const info = await infoR.json();
   const content = JSON.parse(decodeURIComponent(escape(atob(info.content.replace(/\s/g, "")))));
@@ -200,7 +198,8 @@ async function wbFetchDataJson() {
 // 作為 raw.githubusercontent.com 的第二級回退，避免回退到本地陳舊靜態檔造成不同步。
 async function loadDataJsonViaApi() {
   const r = await fetch(WB_API_BASE, {
-    headers: { "Accept": "application/vnd.github+json", "User-Agent": "flood-control-led-board" }
+    headers: { "Accept": "application/vnd.github+json", "User-Agent": "flood-control-led-board" },
+    cache: "no-store"
   });
   if (!r.ok) throw new Error("GitHub API HTTP " + r.status);
   const info = await r.json();
@@ -232,6 +231,7 @@ async function saveWeatherToBoard(weather) {
       method: "PUT",
       headers: Object.assign(wbPatHeaders(), { "Content-Type": "application/json" }),
       body: JSON.stringify(body),
+      cache: "no-store"
     });
     if (!r.ok) {
       const err = await r.json().catch(() => ({}));
@@ -244,7 +244,7 @@ async function saveWeatherToBoard(weather) {
 }
 
 function fetchJson(url) {
-  return fetch(url).then(r => {
+  return fetch(url, { cache: "no-store" }).then(r => {
     if (!r.ok) throw new Error("HKO HTTP " + r.status);
     return r.json();
   });
@@ -389,7 +389,7 @@ function parseHkoWeather(raw, warnInfo, hsww) {
 function render() {
   // 優先從 raw.githubusercontent.com 讀取最新提交（即時、無 Pages 建置延遲）；
   // 若不可達則回退到同目錄相對路徑（Pages 版本）。加時間戳防快取。
-  const loadJson = (url) => fetch(url).then(r => {
+  const loadJson = (url) => fetch(url, { cache: "no-store" }).then(r => {
     if (!r.ok) throw new Error("無法載入資料 (" + r.status + ")");
     return r.json();
   });
