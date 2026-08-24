@@ -75,7 +75,7 @@
       "id": 1787534823262,
       "zone": "222",
       "morning": true,
-      "afternoon": false,
+      "afternoon": true,
       "operations": [
         {
           "text": "",
@@ -109,5 +109,5 @@
     "updateTime": "2026-08-24T08:56:00+08:00",
     "source": "HKO"
   },
-  "lastUpdated": "2026-08-24T01:48:25.890Z"
+  "lastUpdated": "2026-08-24T01:48:37.634Z"
 }
