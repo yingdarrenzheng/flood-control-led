@@ -98,26 +98,45 @@ function showLoginStatus(msg, type) {
   el.className = "login-status " + (type || "");
 }
 
+// 經 GitHub API 取得 data.json（公開倉無需令牌；即時、無 Pages 建置延遲）
+// 作為 raw.githubusercontent.com 的第二級回退，避免回退到本地陳舊靜態檔造成不同步。
+async function fetchApiDataJson() {
+  const r = await fetch(API_BASE, { headers: Object.assign(patHeaders(), { "Accept": "application/vnd.github+json" }) });
+  if (!r.ok) throw new Error("GitHub API HTTP " + r.status);
+  const info = await r.json();
+  return JSON.parse(decodeURIComponent(escape(atob(info.content.replace(/\s/g, "")))));
+}
+
 // ---- 載入資料 ----
 
 async function loadData() {
   try {
-    // 優先從 raw.githubusercontent.com 讀取最新提交（即時、無 Pages 建置延遲）；
-    // 若該來源不可達（如網絡限制），回退到同目錄相對路徑（Pages 版本）。
-    let r = null;
+    let loaded = null;
+    let source = "";
+    // 1) 優先 raw.githubusercontent.com（即時、無 Pages 建置延遲）
     try {
-      r = await fetch("https://raw.githubusercontent.com/yingdarrenzheng/flood-control-led/main/data/data.json?t=" + Date.now());
-    } catch (e) { r = null; }
-    if (!r || !r.ok) {
-      r = await fetch("data/data.json?t=" + Date.now());
+      const r = await fetch("https://raw.githubusercontent.com/yingdarrenzheng/flood-control-led/main/data/data.json?t=" + Date.now());
+      if (r.ok) { loaded = await r.json(); source = "raw"; }
+    } catch (e) {}
+    // 2) 次選 GitHub API（公開倉無需令牌，即時反映最新提交）
+    if (!loaded) {
+      try { loaded = await fetchApiDataJson(); source = "api"; } catch (e) {}
     }
-    if (!r.ok) throw new Error("HTTP " + r.status);
-    appData = await r.json();
+    // 3) 最後才用本地靜態檔（僅離線兜底，可能陳舊）
+    if (!loaded) {
+      const r = await fetch("data/data.json?t=" + Date.now());
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      loaded = await r.json(); source = "local";
+    }
+    appData = loaded;
     migrateOldFormat();
     fillForm();
     renderRows();
     renderHistory();
-    showStatus("資料已載入", "ok");
+    showStatus(
+      source === "local" ? "已載入本地副本（離線，可能未與線上同步）" : "資料已載入（線上最新）",
+      source === "local" ? "info" : "ok"
+    );
   } catch (e) {
     showStatus("載入失敗：" + e.message, "err");
   }
@@ -447,7 +466,12 @@ async function saveData() {
         const result = await r.json();
         fileSha = result.content.sha;
         appData = payload;
-        showStatus("已儲存！看板將在數秒後自動更新。", "ok");
+        showStatus("已儲存！看板將即時同步更新。", "ok");
+        // 通知同一瀏覽器中的看板即時刷新（無須等待 1-2 分鐘）
+        try {
+          const ch = new BroadcastChannel("flood-led-sync");
+          ch.postMessage({ type: "data-updated", t: Date.now() });
+        } catch (e) {}
         renderRows();
         renderHistory();
         return;
