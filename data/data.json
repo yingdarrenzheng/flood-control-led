@@ -116,7 +116,7 @@
       "afternoon": true,
       "operations": [
         {
-          "text": "-\t改建圍街板",
+          "text": "改建圍街板",
           "riskType": "high"
         }
       ],
@@ -158,5 +158,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-08-24T09:33:57.021Z"
+  "lastUpdated": "2026-08-24T10:20:16.976Z"
 }
