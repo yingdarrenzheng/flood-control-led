@@ -24,10 +24,6 @@
         {
           "text": "寫字樓裝修",
           "riskType": "high"
-        },
-        {
-          "text": "手提電工具",
-          "riskType": "high"
         }
       ],
       "safetyMeasures": "工作範圍圍封、使用被註冊電工檢查通過及登記的手提電工具、佩戴PPE(耳塞、眼罩、口罩)、佩戴安全帶",
@@ -40,7 +36,7 @@
       "afternoon": true,
       "operations": [
         {
-          "text": "吊運作業",
+          "text": "吊運大型物件",
           "riskType": "high"
         },
         {
@@ -70,7 +66,7 @@
       "afternoon": true,
       "operations": [
         {
-          "text": "吊運作業",
+          "text": "吊運大型物件",
           "riskType": "high"
         },
         {
@@ -102,7 +98,7 @@
       "afternoon": true,
       "operations": [
         {
-          "text": "手提電工具(磨機)",
+          "text": "工字椿光纖安裝",
           "riskType": "high"
         }
       ],
@@ -116,7 +112,7 @@
       "afternoon": true,
       "operations": [
         {
-          "text": "改建圍街板",
+          "text": "-\t改建圍街板",
           "riskType": "high"
         }
       ],
@@ -158,5 +154,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-08-24T07:27:59.608Z"
+  "lastUpdated": "2026-08-24T09:32:46.836Z"
 }
