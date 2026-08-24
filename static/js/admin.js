@@ -122,6 +122,15 @@ function migrateOldFormat() {
       delete row.operation;
       delete row.riskType;
     }
+    // 舊格式 timeSlot 字串 → 新格式 morning/afternoon 布林
+    if (row.timeSlot != null) {
+      row.morning = (row.timeSlot === "上午" || row.timeSlot === "上午/下午");
+      row.afternoon = (row.timeSlot === "下午" || row.timeSlot === "上午/下午");
+      delete row.timeSlot;
+    } else {
+      if (row.morning == null) row.morning = false;
+      if (row.afternoon == null) row.afternoon = false;
+    }
   });
 }
 
@@ -166,10 +175,13 @@ function syncFromDom() {
     // 以 id（data-id）對應回原有 row，保留 id；否則新增值
     const existingId = tr.dataset.id ? Number(tr.dataset.id) : null;
     const orig = (existingId != null) ? appData.rows.find(r => r.id === existingId) : null;
+    const morningEl = tr.querySelector('[data-field="morning"]');
+    const afternoonEl = tr.querySelector('[data-field="afternoon"]');
     synced.push({
       id: orig ? orig.id : (existingId != null ? existingId : Date.now() + Math.floor(Math.random() * 1000)),
       zone: get("zone"),
-      timeSlot: get("timeSlot") || "上午",
+      morning: morningEl ? morningEl.checked : false,
+      afternoon: afternoonEl ? afternoonEl.checked : false,
       operations: operations,
       safetyMeasures: get("safetyMeasures"),
       subcontractor: get("subcontractor")
@@ -201,10 +213,10 @@ function renderRows() {
       <td class="col-measure"><textarea data-field="safetyMeasures" rows="2">${escapeAttr(row.safetyMeasures)}</textarea></td>
       <td class="col-subcon"><input type="text" data-field="subcontractor" value="${escapeAttr(row.subcontractor)}"></td>
       <td class="col-slot">
-        <select data-field="timeSlot">
-          <option value="上午" ${row.timeSlot === "上午" ? "selected" : ""}>上午</option>
-          <option value="下午" ${row.timeSlot === "下午" ? "selected" : ""}>下午</option>
-        </select>
+        <div class="slot-checks">
+          <label class="slot-check"><input type="checkbox" data-field="morning" ${row.morning ? "checked" : ""}>上午</label>
+          <label class="slot-check"><input type="checkbox" data-field="afternoon" ${row.afternoon ? "checked" : ""}>下午</label>
+        </div>
       </td>
       <td class="col-action">
         <button class="btn btn-secondary btn-to-history" title="存入歷史">⬇ 歷史</button>
@@ -247,7 +259,8 @@ function addRow() {
   appData.rows.push({
     id: Date.now() + Math.floor(Math.random() * 1000),
     zone: "",
-    timeSlot: "上午",
+    morning: true,
+    afternoon: false,
     operations: [{ text: "", riskType: "high" }],
     safetyMeasures: "",
     subcontractor: ""
@@ -311,11 +324,12 @@ function renderHistory() {
   list.forEach(h => {
     const r = h.row || {};
     const ops = (r.operations || []).map(o => (o.riskType === "special" ? "【特別高危】" : "【高危】") + (o.text || "")).join("；") || "（無工序內容）";
+    const slotText = slotLabel(r);
     const div = document.createElement("div");
     div.className = "history-item";
     div.innerHTML = `
       <div class="history-info">
-        <div class="history-meta">${escapeAttr(r.zone || "（未填區域）")} · ${escapeAttr(r.timeSlot || "")} · ${escapeAttr(r.subcontractor || "")} · 存入於 ${new Date(h.savedAt).toLocaleString("zh-HK")}</div>
+        <div class="history-meta">${escapeAttr(r.zone || "（未填區域）")} · ${escapeAttr(slotText)} · ${escapeAttr(r.subcontractor || "")} · 存入於 ${new Date(h.savedAt).toLocaleString("zh-HK")}</div>
         <div class="history-ops">${escapeAttr(ops)}</div>
       </div>
       <div class="history-actions">
@@ -349,10 +363,13 @@ function collectData() {
         riskType: riskEl ? riskEl.value : "high"
       });
     });
+    const morningEl = tr.querySelector('[data-field="morning"]');
+    const afternoonEl = tr.querySelector('[data-field="afternoon"]');
     rows.push({
       id: (appData.rows[idx] && appData.rows[idx].id) || Date.now() + Math.random(),
       zone: get("zone"),
-      timeSlot: get("timeSlot") || "上午",
+      morning: morningEl ? morningEl.checked : false,
+      afternoon: afternoonEl ? afternoonEl.checked : false,
       operations: operations,
       safetyMeasures: get("safetyMeasures"),
       subcontractor: get("subcontractor")
@@ -454,6 +471,16 @@ function escapeAttr(s) {
     .replace(/"/g, "&quot;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
+}
+
+// 由 morning / afternoon 布林推算檢查時段顯示文字
+function slotLabel(r) {
+  const m = !!(r && r.morning);
+  const a = !!(r && r.afternoon);
+  if (m && a) return "上午/下午";
+  if (m) return "上午";
+  if (a) return "下午";
+  return "";
 }
 
 // ---- 天文台即時天氣取樣（填入後備欄位） ----
