@@ -56,6 +56,20 @@
       ],
       "safetyMeasures": "通風、氣體檢測、救援計劃",
       "subcontractor": "安達"
+    },
+    {
+      "id": 1787542249609,
+      "zone": "11111",
+      "morning": true,
+      "afternoon": false,
+      "operations": [
+        {
+          "text": "",
+          "riskType": "high"
+        }
+      ],
+      "safetyMeasures": "",
+      "subcontractor": ""
     }
   ],
   "history": [
@@ -92,5 +106,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-08-24T03:30:13.654Z"
+  "lastUpdated": "2026-08-24T03:30:53.148Z"
 }
