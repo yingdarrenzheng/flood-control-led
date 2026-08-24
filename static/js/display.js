@@ -365,7 +365,7 @@ function parseHkoWeather(raw, warnInfo, hsww) {
   return {
     temperature: temperature,
     condition: condition,
-    conditionLabel: CONDITION_LABEL[condition] || "多雲",
+    conditionLabel: conditionLabel,
     warnings: warnings,
     updateTime: raw.updateTime || "",
     source: "HKO",
