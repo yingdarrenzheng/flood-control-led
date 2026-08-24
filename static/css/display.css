@@ -228,6 +228,12 @@ body {
   text-overflow: ellipsis;
 }
 
+/* 時段欄（上午/下午）字體較小，避免撐爆窄欄 */
+.led-table td.col-slot {
+  font-size: 15px;
+  white-space: nowrap;
+}
+
 .led-table tbody tr {
   height: auto;
 }
