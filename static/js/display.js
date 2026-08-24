@@ -410,7 +410,7 @@ function render() {
           <td>${opsHtml}</td>
           <td>${escapeHtml(row.safetyMeasures)}</td>
           <td>${escapeHtml(row.subcontractor)}</td>
-          <td>${escapeHtml(row.timeSlot || "全天")}</td>
+          <td>${escapeHtml(row.timeSlot || "上午")}</td>
         `;
         tbody.appendChild(tr);
       });
