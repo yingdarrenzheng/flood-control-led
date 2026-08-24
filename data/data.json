@@ -97,12 +97,18 @@
     }
   ],
   "liveWeather": {
-    "temperature": 29,
-    "condition": "sunshower",
-    "conditionLabel": "短暫陽光有驟雨",
-    "warnings": [],
-    "updateTime": "2026-08-24T08:56:00+08:00",
-    "source": "HKO"
+    "temperature": 31,
+    "condition": "cloudy",
+    "conditionLabel": "多雲",
+    "warnings": [
+      {
+        "type": "HSWW_AMBER",
+        "name": "黃色工作暑熱警告",
+        "icon": "static/images/warnings/hsww_amber.jpg"
+      }
+    ],
+    "updateTime": "2026-08-24T10:02:00+08:00",
+    "source": "hko-auto"
   },
-  "lastUpdated": "2026-08-24T02:30:23.917Z"
+  "lastUpdated": "2026-08-24T02:35:34.000Z"
 }
