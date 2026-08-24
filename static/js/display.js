@@ -375,13 +375,27 @@ function parseHkoWeather(raw, warnInfo, hsww) {
 // --- 渲染函數 ---
 
 function render() {
-  // 靜態部署：讀取同目錄下的 data/data.json (加時間戳防快取)
-  fetch("data/data.json?v=" + Date.now())
-    .then(r => {
-      if (!r.ok) throw new Error("無法載入資料 (" + r.status + ")");
-      return r.json();
-    })
-    .then(data => {
+  // 優先從 raw.githubusercontent.com 讀取最新提交（即時、無 Pages 建置延遲）；
+  // 若不可達則回退到同目錄相對路徑（Pages 版本）。加時間戳防快取。
+  const loadJson = (url) => fetch(url).then(r => {
+    if (!r.ok) throw new Error("無法載入資料 (" + r.status + ")");
+    return r.json();
+  });
+  const rawUrl = "https://raw.githubusercontent.com/yingdarrenzheng/flood-control-led/main/data/data.json?v=" + Date.now();
+  const relUrl = "data/data.json?v=" + Date.now();
+  (async () => {
+    let data;
+    try {
+      data = await loadJson(rawUrl);
+    } catch (e) {
+      data = await loadJson(relUrl);
+    }
+    if (!data) {
+      document.getElementById("tableBody").innerHTML =
+        `<tr><td colspan="6" class="error">載入失敗：無法取得資料</td></tr>`;
+      return;
+    }
+    try {
       document.getElementById("title").innerHTML = colorTitle(data.title || "特別高危/高危工序管理看板");
       window.__fallbackData = data;
 
@@ -454,11 +468,11 @@ function render() {
       if (data.liveWeather) {
         renderWeather(data.liveWeather);
       }
-    })
-    .catch(err => {
+    } catch (err) {
       document.getElementById("tableBody").innerHTML =
         `<tr><td colspan="6" class="error">載入失敗：${escapeHtml(err.message)}</td></tr>`;
-    });
+    }
+  })();
 }
 
 function renderWeather(weather) {
