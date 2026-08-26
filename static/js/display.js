@@ -85,6 +85,37 @@ const WARNING_MAP = {
   WMSGN: "強烈季候風信號",
 };
 
+// 判斷是否為「取消／解除」類公告（此類不應視為生效中的警告顯示，
+// 例如 HKO warningInfo 在黃雨取消後仍會返回 code=WRAIN 的「取消黃色暴雨警告信號」公告）。
+function isCancellation(text) {
+  if (!text) return false;
+  return ["取消", "解除", "除下", "撤回", "撤銷", "屆滿", "届满", "已過期", "已經過去"]
+    .some(k => text.includes(k));
+}
+
+// 將各種代碼／名稱統一為標準警告 type，作為去重 key，
+// 避免同一警告因來源不同（warningInfo 的 code vs 描述首句 vs rhrread.warningMessage）而重複顯示。
+function normWarnType(wtype, name) {
+  const code = (wtype || "").toUpperCase();
+  if (WARNING_MAP[code]) return code;          // 已知官方代碼直接採用
+  const n = name || "";
+  if (n.includes("黑色暴雨")) return "WRAINB";
+  if (n.includes("紅色暴雨")) return "WRAINR";
+  if (n.includes("黃色暴雨")) return "WRAINA";
+  if (n.includes("雷暴")) return "WTS";
+  if (n.includes("山泥傾瀉")) return "WRNA";
+  if (n.includes("酷熱")) return "WHOT";
+  if (n.includes("寒冷")) return "WCOLD";
+  if (n.includes("熱帶氣旋") || n.includes("颱風")) return "WTMW";
+  if (n.includes("強烈季候風")) return "WMSGN";
+  if (n.includes("霜凍")) return "WFROST";
+  if (n.includes("火災")) return "WFIRA";
+  if (n.includes("新界北部水浸")) return "WNL";
+  if (n.includes("海嘯")) return "WTSN";
+  if (code) return code;
+  return (name || "UNKNOWN");
+}
+
 // 天氣 emoji / 標籤對照（供離線、預載、demo 等後備路徑使用；與 HKO_ICON_LABEL 對齊）
 const weatherMap = {
   sunny: { icon: "☀", label: "晴" },
@@ -321,24 +352,30 @@ function parseHkoWeather(raw, warnInfo, hsww) {
   // 並非舊版 { warnings:[ {code,name} ] }，故需按 details 解析。
   const warnings = [];
   const seen = new Set();
+  // 以「標準 type」作為去重 key：同一警告（無論來自 warningInfo 的 code、描述首句或
+  // rhrread.warningMessage）只要語意相同（如同為黃色暴雨）即只顯示一次，
+  // 避免出現「兩個黃雨警告」等重複情況。
   const pushWarning = (wtype, name) => {
-    const key = (name || "") + "|" + (wtype || "");
-    if (seen.has(key)) return;
-    seen.add(key);
+    const stdType = normWarnType(wtype, name);
+    if (seen.has(stdType)) return;
+    seen.add(stdType);
     const label = name || WARNING_MAP[wtype] || wtype || "天氣警告";
     warnings.push({
-      type: wtype,
+      type: stdType,
       name: label,
-      icon: "static/images/warnings/" + resolveIcon(wtype, label),
+      icon: "static/images/warnings/" + resolveIcon(stdType, label),
     });
   };
 
+  // 主來源：HKO warningInfo 的 details[]（含 warningStatementCode）；或舊版 warnings[]
   if (warnInfo && Array.isArray(warnInfo.details)) {
     for (const det of warnInfo.details) {
       const code = det.warningStatementCode || "";
       const firstLine = Array.isArray(det.contents) && det.contents.length > 0
         ? det.contents[0]
         : "";
+      // 取消／解除類公告並非生效中的警告，不顯示（如 WRAIN「取消黃色暴雨警告信號」）
+      if (isCancellation(firstLine)) continue;
       // 由 WARNING_MAP 對照中文名，找不到時用描述首句
       const name = WARNING_MAP[code] || firstLine || code;
       pushWarning(code, name);
@@ -348,6 +385,7 @@ function parseHkoWeather(raw, warnInfo, hsww) {
     for (const w of warnInfo.warnings) {
       const wtype = w.code || "";
       const name = w.name || wtype;
+      if (isCancellation(name)) continue;
       pushWarning(wtype, name);
     }
   }
@@ -358,30 +396,32 @@ function parseHkoWeather(raw, warnInfo, hsww) {
     for (const w of wm) {
       const text = typeof w === "string" ? w : (w && w.name ? w.name : "");
       if (!text) continue;
+      if (isCancellation(text)) continue;       // 取消／解除公告不顯示
       // 從文字識別警告類型
       let code = "";
       if (text.includes("雷暴")) code = "WTS";
       else if (text.includes("紅") && text.includes("暴雨")) code = "WRAINR";
       else if (text.includes("黑") && text.includes("暴雨")) code = "WRAINB";
       else if (text.includes("黃") && text.includes("暴雨")) code = "WRAINA";
-      else if (text.includes("山泥傾瀉")) code = "WRANA";
+      else if (text.includes("山泥傾瀉")) code = "WRNA";
       else if (text.includes("酷熱")) code = "WHOT";
       else if (text.includes("寒冷")) code = "WCOLD";
       else if (text.includes("熱帶氣旋") || text.includes("颱風") || /[一二三四五六七八九十]號/.test(text)) code = "WTMW";
       else if (text.includes("強烈季候風")) code = "WTS";
-      // 文本後備只作補充：若主來源已涵蓋該 code 則跳過
-      if (code && !warnings.some(x => x.type === code)) {
+      // 文本後備只作補充：經 pushWarning 的標準 type 去重，主來源已涵蓋則自動跳過
+      if (code) {
         pushWarning(code, WARNING_MAP[code] || text);
       }
     }
   }
 
-  // 勞工處工作暑熱警告 (黃/紅/黑)
+  // 勞工處工作暑熱警告 (黃/紅/黑) — 與天文台來源獨立，仍作去重防呆
   if (hsww && hsww.hsww && hsww.hsww.actionCode !== "CANCEL" && hsww.hsww.actionCode !== "REVOKE") {
-    const lvl = HSWW_LEVEL[hsww.hsww.warningLevel];
-    if (lvl) {
+    const level = hsww.hsww.warningLevel;
+    const lvl = HSWW_LEVEL[level];
+    if (lvl && !warnings.some(x => x.type === "HSWW_" + level)) {
       warnings.push({
-        type: "HSWW_" + hsww.hsww.warningLevel,
+        type: "HSWW_" + level,
         name: lvl.name,
         icon: "static/images/warnings/" + lvl.icon,
       });
