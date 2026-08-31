@@ -194,11 +194,43 @@ function resolveIcon(wtype, name) {
   if (n.includes("十號")) return "tc10.gif";
   const fallback = {
     WRAINA: "raina.gif", WRAINR: "rainr.gif", WRAINB: "rainb.gif",
-    WRNA: "landslip.gif", WTMW: "tc8c.gif", WTS: "ts.gif",
+    WRNA: "landslip.gif", WTMW: "tc1.gif", WTS: "ts.gif",
     WHOT: "vhot.gif", WCOLD: "cold.gif", WFIRA: "firer.gif",
     WFROST: "frost.gif", WNL: "ntfl.gif", WMSGN: "sms.gif",
   };
   return fallback[wtype] || "ts.gif";
+}
+
+// 由熱帶氣旋公告文字擷取具體風球號數（一號/三號/八號方向/九號/十號），
+// 返回 { name, icon }；找不到具體號數時回傳 null，避免在缺乏方向資訊時
+// 一律套用 8 號風球圖示（即 resolveIcon 的 WTMW fallback 舊問題）。
+function extractTcSignal(text) {
+  if (!text) return null;
+  const specific = [
+    ["十號颶風信號", "tc10.gif"],
+    ["九號烈風或暴風信號", "tc9.gif"],
+    ["八號東南烈風或暴風信號", "tc8b.gif"],
+    ["八號西南烈風或暴風信號", "tc8c.gif"],
+    ["八號西北烈風或暴風信號", "tc8d.gif"],
+    ["八號東北烈風或暴風信號", "tc8ne.gif"],
+    ["三號強風信號", "tc3.gif"],
+    ["一號戒備信號", "tc1.gif"],
+  ];
+  for (const [phrase, icon] of specific) {
+    if (text.includes(phrase)) return { name: phrase, icon };
+  }
+  // 無方向標示的通用號數（如「八號烈風或暴風信號」未註明方向，或「一號風球」口語）
+  const generic = [
+    ["十號", "tc10.gif"],
+    ["九號", "tc9.gif"],
+    ["八號", "tc8c.gif"],
+    ["三號", "tc3.gif"],
+    ["一號", "tc1.gif"],
+  ];
+  for (const [num, icon] of generic) {
+    if (text.includes(num) && /信號|風球/.test(text)) return { name: num + "風球", icon };
+  }
+  return null;
 }
 
 // --- HKO 天氣取得 (直接呼叫天文台 API，支援 CORS) ---
@@ -367,15 +399,29 @@ function parseHkoWeather(raw, warnInfo, hsww) {
     });
   };
 
+  // 熱帶氣旋信號：統一以 WTMW 作 type，並以具體號數去重（避免一號/三號/八號重複或誤顯示）
+  const pushTc = (tc) => {
+    if (seen.has("WTMW")) return;
+    seen.add("WTMW");
+    warnings.push({
+      type: "WTMW",
+      name: tc.name,
+      icon: "static/images/warnings/" + tc.icon,
+    });
+  };
+
   // 主來源：HKO warningInfo 的 details[]（含 warningStatementCode）；或舊版 warnings[]
   if (warnInfo && Array.isArray(warnInfo.details)) {
     for (const det of warnInfo.details) {
       const code = det.warningStatementCode || "";
-      const firstLine = Array.isArray(det.contents) && det.contents.length > 0
-        ? det.contents[0]
-        : "";
+      const contents = Array.isArray(det.contents) ? det.contents : [];
+      const firstLine = contents.length > 0 ? contents[0] : "";
       // 取消／解除類公告並非生效中的警告，不顯示（如 WRAIN「取消黃色暴雨警告信號」）
       if (isCancellation(firstLine)) continue;
+      // 熱帶氣旋信號：從完整公告文字擷取具體號數（一號/三號/八號…），
+      // 避免一律套用 8 號風球圖示（舊邏輯 fallback[WTMW]=tc8c.gif 的錯誤）
+      const tc = extractTcSignal(contents.join(" "));
+      if (tc) { pushTc(tc); continue; }
       // 由 WARNING_MAP 對照中文名，找不到時用描述首句
       const name = WARNING_MAP[code] || firstLine || code;
       pushWarning(code, name);
@@ -406,7 +452,11 @@ function parseHkoWeather(raw, warnInfo, hsww) {
       else if (text.includes("山泥傾瀉")) code = "WRNA";
       else if (text.includes("酷熱")) code = "WHOT";
       else if (text.includes("寒冷")) code = "WCOLD";
-      else if (text.includes("熱帶氣旋") || text.includes("颱風") || /[一二三四五六七八九十]號/.test(text)) code = "WTMW";
+      else if (text.includes("熱帶氣旋") || text.includes("颱風") || /[一二三四五六七八九十]號/.test(text)) {
+        const tc = extractTcSignal(text);
+        if (tc) { pushTc(tc); continue; }
+        code = "WTMW";
+      }
       else if (text.includes("強烈季候風")) code = "WTS";
       // 文本後備只作補充：經 pushWarning 的標準 type 去重，主來源已涵蓋則自動跳過
       if (code) {
