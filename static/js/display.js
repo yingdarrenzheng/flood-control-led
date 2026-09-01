@@ -204,6 +204,10 @@ function resolveIcon(wtype, name) {
 // 由熱帶氣旋公告文字擷取具體風球號數（一號/三號/八號方向/九號/十號），
 // 返回 { name, icon }；找不到具體號數時回傳 null，避免在缺乏方向資訊時
 // 一律套用 8 號風球圖示（即 resolveIcon 的 WTMW fallback 舊問題）。
+//
+// 關鍵：公告常同時提及「現正生效」的號數與「將來會改發」的預告（如
+// 「評估屆時是否需要改發三號強風信號」）。必須優先取「現正生效／現正發出」
+// 的那一個，否則會誤把未來預告當成目前號數（曾誤顯 3 號）。
 function extractTcSignal(text) {
   if (!text) return null;
   const specific = [
@@ -216,10 +220,6 @@ function extractTcSignal(text) {
     ["三號強風信號", "tc3.gif"],
     ["一號戒備信號", "tc1.gif"],
   ];
-  for (const [phrase, icon] of specific) {
-    if (text.includes(phrase)) return { name: phrase, icon };
-  }
-  // 無方向標示的通用號數（如「八號烈風或暴風信號」未註明方向，或「一號風球」口語）
   const generic = [
     ["十號", "tc10.gif"],
     ["九號", "tc9.gif"],
@@ -227,8 +227,36 @@ function extractTcSignal(text) {
     ["三號", "tc3.gif"],
     ["一號", "tc1.gif"],
   ];
-  for (const [num, icon] of generic) {
-    if (text.includes(num) && /信號|風球/.test(text)) return { name: num + "風球", icon };
+  // 是否為「生效中」的信號：號數出現位置往後 24 字內標示「現正生效／現正發出／生效中」
+  const inEffect = (s) => /現正生效|現正發出|生效中/.test(s);
+  // 是否為「預告／將來」措辭（非當前生效）：如「改發三號」「是否需要改發」「評估屆時是否需要」
+  const isPreview = (s) => /改發|是否需要|評估屆時|預計|預料.*會.*改|將會|將會改/.test(s);
+
+  const match = (arr, previewOk) => {
+    for (const [phrase, icon] of arr) {
+      const idx = text.indexOf(phrase);
+      if (idx < 0) continue;
+      const ctx = text.slice(Math.max(0, idx - 12), idx + 24);
+      if (inEffect(ctx)) {
+        return { name: arr === generic ? phrase + "風球" : phrase, icon };
+      }
+      // 非「生效中」：僅當允許預告（第二輪）且非「改發/預告」措辭時才採用
+      if (previewOk && !isPreview(ctx)) {
+        return { name: arr === generic ? phrase + "風球" : phrase, icon };
+      }
+    }
+    return null;
+  };
+
+  // 第一輪：優先取「現正生效」的號數（真正生效中的風球）
+  for (const arr of [specific, generic]) {
+    const r = match(arr, false);
+    if (r) return r;
+  }
+  // 第二輪：無「現正生效」標記（如 demo 或舊格式），取第一個陳述性（非預告）號數
+  for (const arr of [specific, generic]) {
+    const r = match(arr, true);
+    if (r) return r;
   }
   return null;
 }
@@ -422,6 +450,10 @@ function parseHkoWeather(raw, warnInfo, hsww) {
       // 避免一律套用 8 號風球圖示（舊邏輯 fallback[WTMW]=tc8c.gif 的錯誤）
       const tc = extractTcSignal(contents.join(" "));
       if (tc) { pushTc(tc); continue; }
+      // 熱帶氣旋類代碼（WTCSGNL / WTPN / 含 TMW）若解析不到「生效中」號數，
+      // 多半是「將來會改發」的預告或取消公告 → 直接跳過，絕不落入後備路徑
+      // （否則 resolveIcon 會因文字含「三號」而誤顯 tc3.gif）。
+      if (/WTCSGNL|WTPN|TMW/i.test(code)) continue;
       // 由 WARNING_MAP 對照中文名，找不到時用描述首句
       const name = WARNING_MAP[code] || firstLine || code;
       pushWarning(code, name);
@@ -455,6 +487,8 @@ function parseHkoWeather(raw, warnInfo, hsww) {
       else if (text.includes("熱帶氣旋") || text.includes("颱風") || /[一二三四五六七八九十]號/.test(text)) {
         const tc = extractTcSignal(text);
         if (tc) { pushTc(tc); continue; }
+        // 文字提及熱帶氣旋/號數但 extractTcSignal 未取得「生效中」號數（如「將來改發」預告）→ 不顯示
+        if (/改發|是否需要|評估屆時|預計|將會/.test(text)) continue;
         code = "WTMW";
       }
       else if (text.includes("強烈季候風")) code = "WTS";
