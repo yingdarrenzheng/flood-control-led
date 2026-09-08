@@ -82,7 +82,7 @@
           "riskType": "high"
         },
         {
-          "text": "",
+          "text": "高空工作(吊人籠)",
           "riskType": "high"
         }
       ],
@@ -166,5 +166,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-09-08T00:21:48.560Z"
+  "lastUpdated": "2026-09-08T00:22:30.048Z"
 }
