@@ -148,21 +148,21 @@
   ],
   "history": [
     {
-      "id": 1787538271007,
-      "savedAt": "2026-08-24T02:24:30.678Z",
+      "id": 1789348647269,
+      "savedAt": "2026-09-14T01:17:26.522Z",
       "row": {
-        "id": 2,
-        "zone": "寫字樓",
+        "id": 1789347076367,
+        "zone": "東廠",
         "morning": true,
-        "afternoon": false,
+        "afternoon": true,
         "operations": [
           {
-            "text": "高空作業（離地面2米以上）",
+            "text": "石矢行人路",
             "riskType": "high"
           }
         ],
-        "safetyMeasures": "工作平台、安全網、全身式安全帶",
-        "subcontractor": "興安"
+        "safetyMeasures": "佩戴PPE( 手套、眼罩、口罩)、使用被註冊電工檢查通過及登記的手提電工具、突出鐵技保護、工作範圍圍封、正確的人力提舉方式",
+        "subcontractor": "永勝"
       }
     }
   ],
@@ -180,5 +180,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-09-14T01:04:13.255Z"
+  "lastUpdated": "2026-09-14T01:17:29.434Z"
 }
