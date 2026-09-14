@@ -24,9 +24,13 @@
         {
           "text": "寫字樓裝修",
           "riskType": "high"
+        },
+        {
+          "text": "安裝天台雨篷",
+          "riskType": "high"
         }
       ],
-      "safetyMeasures": "工作範圍圍封、使用被註冊電工檢查通過及登記的手提電工具、佩戴PPE(耳塞、眼罩、口罩)、佩戴安全帶",
+      "safetyMeasures": "工作範圍圍封、使用被註冊電工檢查通過及登記的手提電工具、佩戴PPE(耳塞、眼罩、口罩)、配戴全身式安全帶、使用有登記及符合標準的梯台",
       "subcontractor": "海龍"
     },
     {
@@ -82,7 +86,7 @@
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "吊運團隊 4+1、吊運5-3-3、機械圍封、提供安全出入通道、電線高掛、吊運許可證、熱工序許可證、佩戴PPE(耳塞、眼罩、口罩)、配戴全身式安全帶",
+      "safetyMeasures": "吊運團隊 4+1、吊運5-3-3、機械圍封、提供安全出入通道、電線高掛、吊運許可證、熱工序許可證、佩戴PPE(耳塞、眼罩、口罩)、配戴全身式安全帶、使用有登記及符合標準的梯台",
       "subcontractor": "GME"
     },
     {
@@ -96,7 +100,7 @@
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "機械圍封、提供安全出入通道、佩戴PPE(耳塞、眼罩、口罩)、佩戴安全帶",
+      "safetyMeasures": "機械圍封、提供安全出入通道、佩戴PPE(耳塞、眼罩、口罩)、配戴全身式安全帶",
       "subcontractor": "德晟 "
     },
     {
@@ -126,6 +130,20 @@
       ],
       "safetyMeasures": "佩戴PPE(耳塞、眼罩、口罩)、妥善儲存化學物品、妥善圍封工作區域",
       "subcontractor": "信隆"
+    },
+    {
+      "id": 1789347076367,
+      "zone": "東廠",
+      "morning": true,
+      "afternoon": true,
+      "operations": [
+        {
+          "text": "石矢行人路",
+          "riskType": "high"
+        }
+      ],
+      "safetyMeasures": "佩戴PPE( 手套、眼罩、口罩)、使用被註冊電工檢查通過及登記的手提電工具、突出鐵技保護、工作範圍圍封、正確的人力提舉方式",
+      "subcontractor": "永勝"
     }
   ],
   "history": [
@@ -162,5 +180,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-09-09T05:14:38.918Z"
+  "lastUpdated": "2026-09-14T01:04:11.351Z"
 }
