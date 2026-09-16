@@ -105,7 +105,7 @@
     },
     {
       "id": 1787552608400,
-      "zone": "西廠&東廠",
+      "zone": "東廠",
       "morning": true,
       "afternoon": true,
       "operations": [
@@ -184,5 +184,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-09-15T09:59:46.852Z"
+  "lastUpdated": "2026-09-16T10:17:26.761Z"
 }
