@@ -148,6 +148,20 @@
       ],
       "safetyMeasures": "佩戴PPE( 手套、眼罩、口罩)、使用被註冊電工檢查通過及登記的手提電工具、突出鐵技保護、工作範圍圍封、正確的人力提舉方式",
       "subcontractor": "永勝"
+    },
+    {
+      "id": 1789614896079,
+      "zone": "西廠",
+      "morning": true,
+      "afternoon": true,
+      "operations": [
+        {
+          "text": "寫字樓裝修",
+          "riskType": "high"
+        }
+      ],
+      "safetyMeasures": "佩戴PPE(耳塞、眼罩、口罩)、使用被註冊電工檢查通過及登記的手提電工具、使用有登記及符合標準的梯台",
+      "subcontractor": "海宏（壯思飛）"
     }
   ],
   "history": [
@@ -184,5 +198,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-09-16T10:17:26.761Z"
+  "lastUpdated": "2026-09-17T03:20:01.878Z"
 }
