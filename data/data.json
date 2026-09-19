@@ -30,7 +30,7 @@
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "工作範圍圍封、使用被註冊電工檢查通過及登記的手提電工具、佩戴PPE(耳塞、眼罩、口罩)、配戴全身式安全帶、使用有登記及符合標準的梯台",
+      "safetyMeasures": "工作範圍圍封、使用被註冊電工檢查通過及登記的手提電工具、佩戴PPE(耳塞、眼罩、口罩、手套)、配戴全身式安全帶、使用有登記及符合標準的梯台",
       "subcontractor": "海龍"
     },
     {
@@ -60,7 +60,7 @@
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "吊運團隊 4+1、吊運5-3-3、機械圍封、提供安全出入通道、電線高掛、吊運許可證、熱工序許可證、佩戴PPE(耳塞、眼罩、口罩)、佩戴安全帶",
+      "safetyMeasures": "吊運團隊 4+1、吊運5-3-3、機械圍封、提供安全出入通道、電線高掛、吊運許可證、熱工序許可證、佩戴PPE(耳塞、眼罩、口罩、手套)、佩戴安全帶",
       "subcontractor": "中基"
     },
     {
@@ -100,22 +100,8 @@
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "機械圍封、提供安全出入通道、佩戴PPE(耳塞、眼罩、口罩)、配戴全身式安全帶",
+      "safetyMeasures": "機械圍封、提供安全出入通道、佩戴PPE(耳塞、眼罩、口罩、手套)、配戴全身式安全帶",
       "subcontractor": "德晟 "
-    },
-    {
-      "id": 1787552608400,
-      "zone": "東廠",
-      "morning": true,
-      "afternoon": true,
-      "operations": [
-        {
-          "text": "改建圍街板",
-          "riskType": "high"
-        }
-      ],
-      "safetyMeasures": "機械圍封、提供安全出入通道、佩戴PPE(耳塞、眼罩、口罩)",
-      "subcontractor": "三興盛"
     },
     {
       "id": 1788429221753,
@@ -128,7 +114,7 @@
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "佩戴PPE(耳塞、眼罩、口罩)、妥善儲存化學物品、妥善圍封工作區域",
+      "safetyMeasures": "佩戴PPE(耳塞、眼罩、口罩、手套)、妥善儲存化學物品、妥善圍封工作區域",
       "subcontractor": "信隆"
     },
     {
@@ -138,15 +124,11 @@
       "afternoon": true,
       "operations": [
         {
-          "text": "石矢行人路",
-          "riskType": "high"
-        },
-        {
-          "text": "混凝土灌漿",
+          "text": "打地台石矢",
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "佩戴PPE( 手套、眼罩、口罩)、使用被註冊電工檢查通過及登記的手提電工具、突出鐵技保護、工作範圍圍封、正確的人力提舉方式",
+      "safetyMeasures": "佩戴PPE( 手套、眼罩、口罩、手套)、使用被註冊電工檢查通過及登記的手提電工具、工作範圍圍封、灑水粉塵控制",
       "subcontractor": "永勝"
     },
     {
@@ -160,8 +142,22 @@
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "佩戴PPE(耳塞、眼罩、口罩)、使用被註冊電工檢查通過及登記的手提電工具、使用有登記及符合標準的梯台",
+      "safetyMeasures": "佩戴PPE(耳塞、眼罩、口罩、手套)、使用被註冊電工檢查通過及登記的手提電工具、使用有登記及符合標準的梯台",
       "subcontractor": "海宏（壯思飛）"
+    },
+    {
+      "id": 1789808266338,
+      "zone": "東廠",
+      "morning": true,
+      "afternoon": true,
+      "operations": [
+        {
+          "text": "拆板",
+          "riskType": "high"
+        }
+      ],
+      "safetyMeasures": "佩戴PPE(耳塞、眼罩、手套)，即時處理突出的釘子，物料堆疊，人力提舉，人機分隔",
+      "subcontractor": "啓力"
     }
   ],
   "history": [
@@ -198,5 +194,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-09-17T03:20:01.878Z"
+  "lastUpdated": "2026-09-19T09:02:12.578Z"
 }
