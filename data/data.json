@@ -156,7 +156,7 @@
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "人機分隔，機械圍封",
+      "safetyMeasures": "人機分隔，機械圍封，挖掘許可證",
       "subcontractor": "啓力"
     }
   ],
@@ -194,5 +194,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-09-28T03:12:40.693Z"
+  "lastUpdated": "2026-09-28T09:24:49.303Z"
 }
