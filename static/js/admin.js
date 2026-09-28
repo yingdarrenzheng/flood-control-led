@@ -17,7 +17,7 @@ const AUTH = {
   userHash: "76497dd79b60e62143a7e88f87bd83f9ce65eb25ed95080b1a713ae65a33c7e9",
   passHash: "0bc5a11eb592c37a0a96dfd12207432ff6bc661e58d064cdef2604141590e877",
   // 部署金鑰（分段編碼，僅供後台儲存資料之用，權限限本 repo）
-  _k: ["Z2l0aHViX3BhdF8xMUNNRzZRUkEwRlZvNjFG", "MFNiajJaX3lGOXJUNTJBMjZYZVNPMFRh", "UGQzUkZJOGQzWWhXcFN2WUJ1aFB6N21G", "aWRaR0QzU0VBSHVsUlNUUjRT"].join("")
+  _k: ["Z2l0aHViX3BhdF8xMUNNRzZRUkEwdnRG", "ZEc4UnNCRjlFX05KRnB5R2k2N3VHWjk=", "VVNIdFhWZENWOU15NVUzQmlqYkROcDY=", "SDJmSUFKejJaS1lMRkxVME4xOUlsVmI="].join("")
 };
 
 function getPat() {
