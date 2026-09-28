@@ -156,7 +156,7 @@
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "人機分隔，機械圍封，",
+      "safetyMeasures": "人機分隔，機械圍封",
       "subcontractor": "啓力"
     }
   ],
@@ -194,5 +194,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-09-28T03:06:24.549Z"
+  "lastUpdated": "2026-09-28T03:06:55.220Z"
 }
