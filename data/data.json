@@ -124,7 +124,7 @@
       "afternoon": true,
       "operations": [
         {
-          "text": "打地台石矢",
+          "text": "地台砌磚",
           "riskType": "high"
         }
       ],
@@ -194,5 +194,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-09-28T03:05:01.469Z"
+  "lastUpdated": "2026-09-28T03:06:24.549Z"
 }
