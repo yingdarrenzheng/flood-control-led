@@ -152,11 +152,11 @@
       "afternoon": true,
       "operations": [
         {
-          "text": "拆板",
+          "text": "挖掘 / 平整",
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "佩戴PPE(耳塞、眼罩、手套)，即時處理突出的釘子，物料堆疊，人力提舉，人機分隔",
+      "safetyMeasures": "人機分隔，機械圍封，",
       "subcontractor": "啓力"
     }
   ],
@@ -194,5 +194,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-09-28T01:58:37.543Z"
+  "lastUpdated": "2026-09-28T03:05:01.469Z"
 }
