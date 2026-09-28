@@ -17,11 +17,12 @@ const AUTH = {
   userHash: "76497dd79b60e62143a7e88f87bd83f9ce65eb25ed95080b1a713ae65a33c7e9",
   passHash: "0bc5a11eb592c37a0a96dfd12207432ff6bc661e58d064cdef2604141590e877",
   // 部署金鑰（分段編碼，僅供後台儲存資料之用，權限限本 repo）
-  _k: ["Z2l0aHViX3BhdF8xMUNNRzZRUkEwdnRG", "ZEc4UnNCRjlFX05KRnB5R2k2N3VHWjk=", "VVNIdFhWZENWOU15NVUzQmlqYkROcDY=", "SDJmSUFKejJaS1lMRkxVME4xOUlsVmI="].join("")
+  // 存為陣列，getPat() 逐段 atob 再拼合，避免分段 base64 尾墊 '=' 串接後失效
+  _k: ["Z2l0aHViX3BhdF8xMUNNRzZRUkEwdnRG", "ZEc4UnNCRjlFX05KRnB5R2k2N3VHWjk=", "VVNIdFhWZENWOU15NVUzQmlqYkROcDY=", "SDJmSUFKejJaS1lMRkxVME4xOUlsVmI="]
 };
 
 function getPat() {
-  try { return atob(AUTH._k); } catch (e) { return ""; }
+  try { return AUTH._k.map(function (s) { return atob(s); }).join(""); } catch (e) { return ""; }
 }
 
 async function sha256Hex(str) {
