@@ -86,20 +86,6 @@
       "subcontractor": "德晟 "
     },
     {
-      "id": 1788429221753,
-      "zone": "CLC",
-      "morning": true,
-      "afternoon": true,
-      "operations": [
-        {
-          "text": "天花防水",
-          "riskType": "high"
-        }
-      ],
-      "safetyMeasures": "佩戴PPE(耳塞、眼罩、口罩、手套)、妥善儲存化學物品、妥善圍封工作區域",
-      "subcontractor": "信隆"
-    },
-    {
       "id": 1789808266338,
       "zone": "西廠&東廠",
       "morning": true,
@@ -162,5 +148,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-10-07T00:38:18.788Z"
+  "lastUpdated": "2026-10-11T16:50:01.758Z"
 }
