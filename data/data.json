@@ -92,11 +92,11 @@
       "afternoon": true,
       "operations": [
         {
-          "text": "天雨棚",
+          "text": "執漏, 唧膠",
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "吊運團隊 4+1、吊運5-3-3、機械圍封、提供安全出入通道、電線高掛、吊運許可證、佩戴安全帶",
+      "safetyMeasures": "機械圍封、提供安全出入通道、電線高掛、佩戴安全帶",
       "subcontractor": "海龍"
     }
   ],
@@ -134,5 +134,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-10-12T02:02:53.347Z"
+  "lastUpdated": "2026-10-12T08:13:57.348Z"
 }
