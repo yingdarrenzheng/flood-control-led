@@ -96,7 +96,7 @@
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "機械圍封、提供安全出入通道、電線高掛、佩戴安全帶",
+      "safetyMeasures": "升降台圍封、提供安全出入通道、電線高掛、佩戴安全帶",
       "subcontractor": "海龍"
     }
   ],
@@ -134,5 +134,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-10-12T08:14:32.482Z"
+  "lastUpdated": "2026-10-12T09:40:30.288Z"
 }
