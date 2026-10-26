@@ -92,7 +92,7 @@
       "afternoon": true,
       "operations": [
         {
-          "text": "打石矢",
+          "text": "打石台",
           "riskType": "high"
         }
       ],
@@ -134,5 +134,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-10-22T05:34:48.229Z"
+  "lastUpdated": "2026-10-26T00:40:04.572Z"
 }
