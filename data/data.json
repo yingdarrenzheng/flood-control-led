@@ -72,20 +72,6 @@
       "subcontractor": "GME"
     },
     {
-      "id": 1792573852548,
-      "zone": "西廠&東廠",
-      "morning": true,
-      "afternoon": true,
-      "operations": [
-        {
-          "text": "打石台，挖坑，平整",
-          "riskType": "high"
-        }
-      ],
-      "safetyMeasures": "機械圍封，提供安全出入通道，泥坑邊緣圍封",
-      "subcontractor": "啓力"
-    },
-    {
       "id": 1793769513914,
       "zone": "寫字樓",
       "morning": true,
@@ -134,5 +120,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-11-04T06:11:08.517Z"
+  "lastUpdated": "2026-11-07T05:06:25.439Z"
 }
