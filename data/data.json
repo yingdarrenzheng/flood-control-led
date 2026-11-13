@@ -96,7 +96,7 @@
           "riskType": "high"
         }
       ],
-      "safetyMeasures": "佩戴手套，手提電工具檢查，手提電工手柄，孔穴圍封，人車分隔",
+      "safetyMeasures": "佩戴手套，手提電工具檢查，手提電工具佩手柄，孔穴圍封，人車分隔",
       "subcontractor": "德晟"
     }
   ],
@@ -134,5 +134,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-11-13T03:34:02.765Z"
+  "lastUpdated": "2026-11-13T03:34:36.084Z"
 }
