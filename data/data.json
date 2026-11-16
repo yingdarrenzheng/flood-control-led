@@ -17,7 +17,7 @@
   "rows": [
     {
       "id": 4,
-      "zone": "西廠&東廠",
+      "zone": "東廠",
       "morning": true,
       "afternoon": true,
       "operations": [
@@ -27,10 +27,6 @@
         },
         {
           "text": "610通插工字椿",
-          "riskType": "high"
-        },
-        {
-          "text": "撞擊式工字椿",
           "riskType": "high"
         },
         {
@@ -134,5 +130,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-11-13T03:34:36.084Z"
+  "lastUpdated": "2026-11-16T03:40:09.081Z"
 }
