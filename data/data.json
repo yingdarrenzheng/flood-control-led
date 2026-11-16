@@ -30,7 +30,7 @@
           "riskType": "high"
         },
         {
-          "text": "燒焊切割",
+          "text": "熱工序",
           "riskType": "high"
         },
         {
@@ -52,7 +52,7 @@
           "riskType": "high"
         },
         {
-          "text": "燒焊切割",
+          "text": "熱工序",
           "riskType": "high"
         },
         {
@@ -134,5 +134,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-11-16T07:30:41.044Z"
+  "lastUpdated": "2026-11-16T07:31:49.185Z"
 }
