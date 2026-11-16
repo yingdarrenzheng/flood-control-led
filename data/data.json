@@ -52,7 +52,7 @@
           "riskType": "high"
         },
         {
-          "text": "風煤切割",
+          "text": "燒焊切割",
           "riskType": "high"
         },
         {
@@ -130,5 +130,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-11-16T03:40:09.081Z"
+  "lastUpdated": "2026-11-16T03:40:50.129Z"
 }
