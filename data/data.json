@@ -83,7 +83,7 @@
     },
     {
       "id": 1794537703605,
-      "zone": "SDT&SDB",
+      "zone": "SDT&SDB, SDSDB",
       "morning": true,
       "afternoon": true,
       "operations": [
@@ -134,5 +134,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-11-16T07:31:49.185Z"
+  "lastUpdated": "2026-11-16T08:48:23.090Z"
 }
