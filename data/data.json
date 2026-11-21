@@ -68,20 +68,6 @@
       "subcontractor": "GME"
     },
     {
-      "id": 1793769513914,
-      "zone": "寫字樓",
-      "morning": true,
-      "afternoon": true,
-      "operations": [
-        {
-          "text": "執色面板",
-          "riskType": "high"
-        }
-      ],
-      "safetyMeasures": "圍封工作區，提供安全出入通道、手提電工具有護罩和手抦、使用合規梯台、佩戴PPE(耳塞、眼罩、口罩、手套)",
-      "subcontractor": "海龍"
-    },
-    {
       "id": 1794537703605,
       "zone": "IWSTB, SDSDB",
       "morning": true,
@@ -106,21 +92,21 @@
   ],
   "history": [
     {
-      "id": 1787538271007,
-      "savedAt": "2026-08-24T02:24:30.678Z",
+      "id": 1795254115868,
+      "savedAt": "2026-11-21T09:41:55.429Z",
       "row": {
-        "id": 2,
+        "id": 1793769513914,
         "zone": "寫字樓",
         "morning": true,
-        "afternoon": false,
+        "afternoon": true,
         "operations": [
           {
-            "text": "高空作業（離地面2米以上）",
+            "text": "執色面板",
             "riskType": "high"
           }
         ],
-        "safetyMeasures": "工作平台、安全網、全身式安全帶",
-        "subcontractor": "興安"
+        "safetyMeasures": "圍封工作區，提供安全出入通道、手提電工具有護罩和手抦、使用合規梯台、佩戴PPE(耳塞、眼罩、口罩、手套)",
+        "subcontractor": "海龍"
       }
     }
   ],
@@ -138,5 +124,5 @@
     "updateTime": "2026-08-24T10:02:00+08:00",
     "source": "hko-auto"
   },
-  "lastUpdated": "2026-11-18T00:55:07.640Z"
+  "lastUpdated": "2026-11-21T09:42:07.701Z"
 }
